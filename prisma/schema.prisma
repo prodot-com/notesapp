@@ -18,6 +18,7 @@ model User {
   sessions Session[]
 
   notes Note[]
+  files File[]
 }
 
 model Account {
@@ -68,3 +69,18 @@ model Note {
 
   @@index([userId])
 }
+
+model File {
+  id        String   @id @default(cuid())
+  name      String
+  path      String
+  size      Int
+  type      String
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+

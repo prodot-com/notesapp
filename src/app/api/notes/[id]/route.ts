@@ -13,7 +13,7 @@ export async function PUT(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await params; // ✅ unwrap params
+  const { id } = await params;
 
   const { title, content } = await req.json();
 

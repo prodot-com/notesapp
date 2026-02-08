@@ -24,6 +24,5 @@ export default async function SharedFile({
 
   if (!file) notFound();
 
-  // If using signed URLs, call your /view API instead
   redirect(file.path);
 }

@@ -30,6 +30,25 @@ export default function EditNote({ note }: { note: Note }) {
         <h3>{note.title}</h3>
         <p>{note.content ?? ""}</p>
         <button onClick={() => setEditing(true)}>Edit</button>
+        <button
+  onClick={async () => {
+    const res = await fetch("/api/share/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "note",      
+        resourceId: note.id, 
+        expiresInHours: 24,
+      }),
+    });
+
+    const { url } = await res.json();
+    await navigator.clipboard.writeText(url);
+    alert("Share link copied!");
+  }}
+>
+  Share
+</button>
       </div>
     );
   }

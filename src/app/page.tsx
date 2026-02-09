@@ -4,13 +4,13 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Note from "@/lib/logo";
 
-const PaperlessLanding = () => {
+const Landing = () => {
   const router = useRouter();
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[#1A1A1A] font-sans selection:bg-blue-100 overflow-x-hidden">
       {/* Subtle SVG Background - Refined Dot Matrix */}
-      <div className="fixed inset-0 z-0 opacity-15 pointer-events-none">
+      <div className="fixed inset-0 z-0 opacity-20 pointer-events-none">
         <svg width="100%" height="100%">
           <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
             <circle cx="2" cy="2" r="1" fill="black" />
@@ -29,15 +29,9 @@ const PaperlessLanding = () => {
         <div className="flex items-center gap-8">
           <button 
             onClick={() => router.push("/auth")}
-            className="text-sm font-medium hover:text-blue-600 transition-colors"
-          >
-            Sign In
-          </button>
-          <button 
-            onClick={() => router.push("/auth")}
             className="bg-[#1A1A1A] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-blue-600 transition-all shadow-sm"
           >
-            Get Started
+            Sign in
           </button>
         </div>
       </nav>
@@ -68,7 +62,7 @@ const PaperlessLanding = () => {
               onClick={() => router.push("/auth")}
               className="relative z-10 bg-white border border-neutral-200 px-8 py-4 rounded-xl text-lg font-medium hover:border-neutral-900 transition-all duration-500 flex items-center gap-3 shadow-xl shadow-neutral-100"
             >
-              Create your first note
+              Get Started
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
             </button>
             {/* Experimental SVG soft glow */}
@@ -117,4 +111,4 @@ const PaperlessLanding = () => {
   );
 };
 
-export default PaperlessLanding;
+export default Landing;

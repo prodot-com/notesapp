@@ -5,7 +5,7 @@ import { useState } from "react";
 type Note = {
   id: string;
   title: string;
-  content: string | null; // ✅ FIX
+  content: string | null;
 };
 
 export default function EditNote({ note }: { note: Note }) {

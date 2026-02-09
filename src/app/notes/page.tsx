@@ -2,8 +2,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import  prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import NotesClient from "./NotesClient";
-import EditNote from "./EditNotes";
+import NotesClient from "../../components/NotesClient";
+import EditNote from "../../components/EditNotes";
 
 export default async function NotesPage({
   searchParams,

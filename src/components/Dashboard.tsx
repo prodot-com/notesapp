@@ -16,15 +16,9 @@ import {
 
 export default function Dashboard({
   session,
-  storageUsed,
-  totalNotes,
-  totalFiles,
   children,
 }: {
   session: any;
-  storageUsed: number;
-  totalFiles: number;
-  totalNotes: number;
   children: React.ReactNode;
 }) {
   const [isDark, setIsDark] = useState(false);
@@ -40,17 +34,12 @@ export default function Dashboard({
     }
   };
 
-  const maxStorage = 1 * 1024 * 1024 * 1024; // 1GB
-  const percent = Math.min((storageUsed / maxStorage) * 100, 100);
-  const roundedPercent = percent.toFixed(3);
-
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-[#0a0a0a] text-[#1A1A1A] dark:text-neutral-100 flex transition-colors duration-300">
-
+      
       {/* Sidebar */}
       <aside className="w-20 md:w-64 border-r border-neutral-300 dark:border-neutral-800 flex flex-col bg-white dark:bg-[#0a0a0a] sticky top-0 h-screen z-20">
-
-        {/* Logo */}
+        
         <div className="p-6 flex items-center gap-3">
           <Note className="text-2xl text-neutral-900 dark:text-white" />
           <span className="hidden md:block font-medium tracking-tight">
@@ -58,9 +47,7 @@ export default function Dashboard({
           </span>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-4 space-y-2 mt-4">
-
           <Link href="/dashboard">
             <SidebarItem icon={<Home size={20} />} label="Home" />
           </Link>
@@ -88,21 +75,7 @@ export default function Dashboard({
           </button>
         </nav>
 
-        {/* Storage Meter */}
-        <div className="px-6 py-4 hidden md:block">
-          <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2">
-            <span>Storage</span>
-            <span>{roundedPercent}% / 1GB</span>
-          </div>
-          <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-500"
-              style={{ width: `${percent}%` }}
-            />
-          </div>
-        </div>
-
-        {/* User Profile */}
+        {/* Profile */}
         <div className="p-4 border-t border-neutral-100 dark:border-neutral-800">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 overflow-hidden">
@@ -131,7 +104,7 @@ export default function Dashboard({
         </div>
       </aside>
 
-      {/* Page Content */}
+      {/* Content */}
       <main className="flex-1 overflow-y-auto">
         {children}
       </main>

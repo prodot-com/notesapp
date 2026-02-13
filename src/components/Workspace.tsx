@@ -18,17 +18,17 @@ const Workspace = ({storageUsed, totalFiles, totalNotes}:{
 
     return (
     <div>
-        <main className="flex-1 relative overflow-y-auto">
-        <div className="relative z-10 p-8 md:p-12 max-w-6xl mx-auto">
-          
-          {/* Welcome Header */}
-          <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <main className="relative overflow-y-auto min-h-screen w-full">
+        <div className="relative z-10 p-8 md:p-12 mx-auto min-h-screen bg-slate-50 dark:bg-[#050505] overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-500/70 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[10%] right-[-5%] w-[30%] h-[30%] rounded-full bg-blue-500/70 blur-[120px] pointer-events-none" />
+          <header className="relative z-20 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="flex items-center gap-2 text-neutral-400 text-sm mb-2">
+              <div className="flex items-center gap-2 text-black dark:text-neutral-100 text-sm mb-2">
                 <Clock size={14} />
                 <span>Last synced: Just now</span>
               </div>
-              <h1 className="text-4xl font-light tracking-tight italic font-serif italic">Workspace</h1>
+              <h1 className="text-4xl text- dark:text-white tracking-tight italic font-serif">Workspace</h1>
             </div>
             
             <div className="flex gap-3">
@@ -43,7 +43,6 @@ const Workspace = ({storageUsed, totalFiles, totalNotes}:{
             </div>
           </header>
 
-          {/* Added: Quick Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             <StatBox label="Total Notes" value={totalNotes} />
             <StatBox label="Attached Files" value={totalFiles} />
@@ -75,7 +74,7 @@ const Workspace = ({storageUsed, totalFiles, totalNotes}:{
 
 function StatBox({ label, value }: { label: string, value: string | number }) {
   return (
-    <div className="bg-white dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl">
+    <div className="relative z-20 bg-white dark:bg-neutral-900/50 border border-neutral-300 dark:border-neutral-800 p-5 rounded-2xl">
       <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-1">{label}</p>
       <p className="text-2xl font-light tracking-tight">{value}</p>
     </div>
@@ -85,7 +84,7 @@ function StatBox({ label, value }: { label: string, value: string | number }) {
 
 function DashboardCard({ href, title, description, icon, color }: any) {
   return (
-    <Link href={href} className="group relative block h-full">
+    <Link href={href} className="group relative block h-full z-20">
       <div className="bg-white dark:bg-[#0d0d0d] border border-neutral-100 dark:border-neutral-800 p-8 rounded-3xl shadow-sm hover:border-neutral-300 dark:hover:border-neutral-600 transition-all flex flex-col h-full">
         <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-6`}>
           {icon}

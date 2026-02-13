@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Note from "@/lib/logo";
 import { Sun,Moon, X } from "lucide-react";
@@ -11,6 +11,10 @@ const Landing = () => {
   const [loginModal, setLoginModal] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
+
+  useEffect(()=>{
+    console.log(session)
+  })
 
   const toggleTheme = () => {
   const html = document.documentElement;

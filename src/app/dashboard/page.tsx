@@ -18,12 +18,24 @@ export default async function DashboardPage() {
     },
   });
 
+  // console.log(totalSize)
+
   const storageUsed = totalSize._sum.size || 0;
+
+  const totalNotes = await prisma.note.count({
+    where: { userId: session.user.id },
+  });
+
+  const totalFiles = await prisma.file.count({
+    where: { userId: session.user.id },
+  });
 
   return (
     <DashboardClient
       session={session}
       storageUsed={storageUsed}
+      totalNotes={totalNotes}
+      totalFiles={totalFiles}
     />
   );
 }

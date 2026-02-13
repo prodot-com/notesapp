@@ -21,10 +21,14 @@ import Workspace from "./Workspace";
 
 export default function DashboardClient({ 
     session ,
-    storageUsed
+    storageUsed,
+    totalNotes,
+    totalFiles
 }: { 
     session: any;
-    storageUsed: number 
+    storageUsed: number,
+    totalFiles: number,
+    totalNotes: number
 }) {
   const [isDark, setIsDark] = useState(false);
 
@@ -39,14 +43,19 @@ export default function DashboardClient({
     }
   };
 
-  const maxStorage = 1 * 1024 * 1024;
-    const percent = Math.floor(Math.min((storageUsed / maxStorage) * 100, 100));
-    // console.log("Per "+percent)
+    const maxStorage = 1 * 1024 * 1024 * 1024; // 1GB
+
+    const percent = Math.min(
+    (storageUsed / maxStorage) * 100,
+    100
+    );
+
+    const roundedPercent = percent.toFixed(3); // better precision
 
 
-//   useEffect(()=>{
-//     console.log(session)
-//   })
+  useEffect(()=>{
+    console.log(session)
+  })
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-[#0a0a0a] text-[#1A1A1A] dark:text-neutral-100 flex transition-colors duration-300">
@@ -78,7 +87,7 @@ export default function DashboardClient({
         <div className="px-6 py-4 hidden md:block">
           <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-2">
             <span>Storage</span>
-            <span>{`${percent}%`}</span>
+            <span>{`${roundedPercent}% out of 1GB`}</span>
           </div>
           <div className="h-1.5 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
             <div className="h-full bg-blue-500" style={{ width: `${percent}%` }} />
@@ -111,7 +120,10 @@ export default function DashboardClient({
       </aside>
 
       {/* Main Content Area */}
-        <Workspace storageUsed={storageUsed}/>
+        <Workspace storageUsed={storageUsed}
+                    totalFiles= {totalFiles}
+                    totalNotes={totalNotes}
+        />
     </div>
   );
 }

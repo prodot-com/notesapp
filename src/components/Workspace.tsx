@@ -1,16 +1,28 @@
 import { Clock, FileText, HardDrive, Plus, Search } from "lucide-react"
 import Link from "next/link";
 
-const Workspace = ({storageUsed}:{storageUsed: number}) => {
+const Workspace = ({storageUsed, totalFiles, totalNotes}:{
+    storageUsed: number,
+    totalNotes: number,
+    totalFiles: number
+}) => {
 
-    function formatBytes(bytes: number) {
+    function formatBytes2(bytes: number) {
         console.log(storageUsed)
       const gb = bytes / (1024 * 1024 * 1024);
       const mb = bytes / (1024 * 1024);
     
       if (gb >= 1) return gb.toFixed(2) + " GB";
       return mb.toFixed(2) + " MB";
-    }
+    }  
+
+    function formatBytes(bytes: number) {
+  const sizes = ["B", "KB", "MB", "GB"];
+  const k = 1000;
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return (bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i];
+}
+
     
 
     return (
@@ -42,10 +54,9 @@ const Workspace = ({storageUsed}:{storageUsed: number}) => {
 
           {/* Added: Quick Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <StatBox label="Total Notes" value="24" />
-            <StatBox label="Attached Files" value="142" />
+            <StatBox label="Total Notes" value={totalNotes} />
+            <StatBox label="Attached Files" value={totalFiles} />
             <StatBox label="Space Used" value={formatBytes(storageUsed)} />
-            <StatBox label="Drafts" value="3" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -71,7 +82,7 @@ const Workspace = ({storageUsed}:{storageUsed: number}) => {
     )
 }
 
-function StatBox({ label, value }: { label: string, value: string }) {
+function StatBox({ label, value }: { label: string, value: string | number }) {
   return (
     <div className="bg-white dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 p-5 rounded-2xl">
       <p className="text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-1">{label}</p>

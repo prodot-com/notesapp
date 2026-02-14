@@ -12,7 +12,9 @@ import {
     X,
     ChevronLeft, 
     MoreVertical,
-    Menu, 
+    Menu,
+    RefreshCw,
+    RefreshCcw, 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CustomModal from "./CustomModal";
@@ -34,6 +36,7 @@ export default function NotesEditor({
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const previousId = useRef<string | null>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -124,6 +127,32 @@ export default function NotesEditor({
         }
     }
 
+    async function refreshNotes() {
+    try {
+        setIsRefreshing(true)
+        setIsSaving(true);
+
+        const res = await fetch("/api/notes", {
+            method: "GET",
+        });
+
+        if (!res.ok) throw new Error();
+
+        const freshNotes = await res.json();
+        setNotes(freshNotes);
+
+        toast.success("Vault refreshed");
+        setIsRefreshing(false)
+    } catch {
+        toast.error("Failed to refresh");
+        setIsRefreshing(false)
+    } finally {
+        setIsSaving(false);
+        setIsRefreshing(false)
+    }
+}
+
+
     async function createNote() {
         try {
             const res = await fetch("/api/notes", {
@@ -136,7 +165,7 @@ export default function NotesEditor({
             setNotes((prev) => [newNote, ...prev]);
             setActiveId(newNote.id);
             setSearchQuery("");
-            setSidebarOpen(false); // Switch to editor on mobile
+            setSidebarOpen(false);
             toast.success("New sheet added");
         } catch {
             toast.error("Failed to create note");
@@ -173,7 +202,7 @@ export default function NotesEditor({
                 onClose={() => setModal({ ...modal, isOpen: false })}
             />
 
-            {/* SIDEBAR */}
+            
             <aside className={`
                 absolute md:relative z-30 h-full bg-white dark:bg-[#0a0a0a] transition-all duration-300 ease-in-out
                 w-full md:w-[320px] lg:w-[380px] border-r border-neutral-100 dark:border-neutral-800 flex flex-col
@@ -249,7 +278,6 @@ export default function NotesEditor({
                 </div>
             </aside>
 
-            {/* MAIN EDITOR AREA */}
             <main className="flex-1 flex flex-col relative bg-[#FDFDFD] dark:bg-[#0a0a0a] min-w-0">
                 <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
                     <svg width="100%" height="100%">
@@ -260,22 +288,47 @@ export default function NotesEditor({
                     </svg>
                 </div>
 
-                <header className="relative z-10 px-6 md:px-10 py-5 md:py-7 flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-black/70 backdrop-blur-xl">
-                    <div className="flex items-center gap-3">
-                        {/* Mobile Back Button */}
-                        <button 
-                            onClick={() => setSidebarOpen(true)}
-                            className="md:hidden p-2 -ml-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition-colors"
-                        >
-                            <ChevronLeft size={20} />
-                        </button>
-                        
-                        <div className={`w-2 h-2 rounded-full ${isSaving ? "bg-blue-500 animate-pulse" : "bg-green-500"}`} />
-                        <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-neutral-400 select-none">
-                            {isSaving ? "Syncing..." : lastSaved ? `Saved • ${lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : "Draft"}
-                        </span>
-                    </div>
-                </header>
+            <header className="relative z-10 px-6 md:px-10 py-5 md:py-7 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-black/70 backdrop-blur-xl">
+
+            <div className="flex items-center gap-3">
+
+                <button
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden p-2 -ml-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg transition-colors"
+                >
+                <ChevronLeft size={20} />
+                </button>
+                <div
+                className={`w-2 h-2 rounded-full ${
+                    isSaving ? "bg-blue-500 animate-pulse" : "bg-green-500"
+                }`}
+                />
+
+                <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-neutral-400 select-none">
+                {isSaving
+                    ? "Syncing..."
+                    : lastSaved
+                    ? `Saved • ${lastSaved.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}`
+                    : "Draft"}
+                </span>
+            </div>
+
+            <button
+                onClick={refreshNotes}
+                className="flex items-center gap-2 px-1 py-1 text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            >
+                <RefreshCcw
+                size={17}
+                className={isRefreshing ? "animate-spin" : ""}
+                />
+                
+            </button>
+
+            </header>
+
 
                 <div className="flex-1 relative z-10 overflow-y-auto w-full max-w-5xl mx-auto custom-scrollbar">
                     <AnimatePresence mode="wait">

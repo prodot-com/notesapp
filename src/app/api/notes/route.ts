@@ -42,3 +42,23 @@ export async function POST(req: Request) {
     );
   }
 }
+
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const notes = await prisma.note.findMany({
+    where: {
+      userId: session.user.id,
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
+
+  return NextResponse.json(notes);
+}

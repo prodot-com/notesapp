@@ -10,9 +10,9 @@ import {
     Search,
     Clock,
     X,
-    ChevronLeft, // Added for mobile back button
+    ChevronLeft, 
     MoreVertical,
-    Menu,        // Added for mobile menu toggle
+    Menu, 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CustomModal from "./CustomModal";
@@ -29,14 +29,10 @@ export default function NotesEditor({
     initialNotes: Note[];
 }) {
     const [notes, setNotes] = useState(initialNotes);
-    const [activeId, setActiveId] = useState<string | null>(
-        initialNotes[0]?.id ?? null
-    );
+    const [activeId, setActiveId] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    
-    // Mobile responsiveness state
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const previousId = useRef<string | null>(null);
@@ -58,11 +54,16 @@ export default function NotesEditor({
     const activeNote = notes.find((n) => n.id === activeId);
 
     useEffect(() => {
-        const saved = localStorage.getItem("activeNote");
-        if (saved) setActiveId(saved);
-        
-        // On mobile, if there's an active note already, hide sidebar on mount
-        if (window.innerWidth < 768 && saved) setSidebarOpen(false);
+    const saved = localStorage.getItem("activeNote");
+    const isMobile = window.innerWidth < 768;
+
+    if (!isMobile && saved) {
+        setActiveId(saved);
+    }
+
+    if (isMobile) {
+        setSidebarOpen(true);
+    }
     }, []);
 
     useEffect(() => {

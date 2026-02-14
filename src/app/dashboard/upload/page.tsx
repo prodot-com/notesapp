@@ -80,7 +80,21 @@ export default function UploadPage() {
           </div>
         </header>
 
-        {/* Drag & Drop Zone */}
+        <div>
+        {
+          loading ? (
+        <div
+          className="min-h-70 relative group border-2 border-dashed rounded-3xl p-12 transition-all duration-500 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d]
+        border-neutral-100 dark:border-neutral-800 shadow-xl shadow-neutral-100 dark:shadow-none"
+        >
+          <div className={`p-4 rounded-2xl mb-4 transition-colors ${isDragging ? "bg-blue-500 text-white" : "bg-neutral-50 dark:bg-neutral-900 text-neutral-400"}`}>
+            <Upload size={32} className="animate-bounce"/>
+          </div>
+          <h3 className="text-lg font-medium mb-1">
+            Uploading your asset...
+          </h3>
+        </div>
+          ):(
         <div 
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
@@ -111,8 +125,11 @@ export default function UploadPage() {
             />
           </label>
         </div>
+          )
+        }
+        </div>
 
-        {/* File List */}
+        
         <div className="mt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-400">Stored Assets ({files.length})</h2>
@@ -167,7 +184,6 @@ export default function UploadPage() {
     </div>
   );
 
-  // Helper logic functions to keep TSX clean
   async function handleAction(id: string, action: string) {
     const res = await fetch(`/api/upload/${id}/${action}`);
     const { url } = await res.json();

@@ -181,7 +181,7 @@ export default function UploadPage() {
                 >
                   <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
                     <div className="w-10 h-10 shrink-0 bg-neutral-50 dark:bg-neutral-900 rounded-xl flex items-center justify-center text-neutral-400 group-hover:text-blue-500 transition-colors">
-                      <File size={20} />
+                      <HardDrive size={20} />
                     </div>
                     <div className="overflow-hidden">
                       <p className="text-sm font-medium truncate pr-2">{f.name}</p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, FileText, HardDrive, Plus, Search, User, ArrowRight, X } from "lucide-react";
+import { Clock, FileText, HardDrive, Plus, Search, User, ArrowRight, X, Database } from "lucide-react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -39,10 +39,12 @@ export default function Workspace({
 
   const [search, setSearch] = useState("");
   const router = useRouter();
-  const[isFocused, setIsFocused]=useState(false)
+  const[isFocused, setIsFocused]=useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearch = () => {
     if (!search.trim()) return;
+    setHasSearched(true);
     router.push(`/dashboard/notes?q=${encodeURIComponent(search)}`);
   };
 
@@ -128,27 +130,27 @@ export default function Workspace({
 
                 <button
                   onClick={handleSearch}
-                  className={`mr-1 px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-tighter transition-all ${search.trim() ? 'bg-neutral-900 text-white dark:bg-white dark:text-black opacity-100' : 'opacity-0 pointer-events-none'}`}
+                  className={`cursor-pointer mr-1 px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-tighter transition-all ${search.trim() && !hasSearched ? 'bg-neutral-900 text-white dark:bg-white dark:text-black opacity-100' : 'opacity-0 pointer-events-none'}`}
                 >
                   Go
                 </button>
               </div>
             </div>
 
-            <Link
+            {/* <Link
               href="/notes"
               className="bg-[#1A1A1A] dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl flex items-center justify-center gap-2 text-sm font-medium hover:opacity-80 transition-all shadow-xl shadow-blue-500/10 active:scale-95"
             >
               <Plus size={18} />
               New Sheet
-            </Link>
+            </Link> */}
           </div>
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
           <StatBox label="Active Notes" value={totalNotes} icon={<FileText className="text-blue-500" size={16} />} />
           <StatBox label="Vault Assets" value={totalFiles} icon={<HardDrive className="text-emerald-500" size={16} />} />
-          <StatBox label="Storage Capacity" value={formatBytes(storageUsed)} icon={<Clock className="text-amber-500" size={16} />} />
+          <StatBox label="Storage Capacity" value={formatBytes(storageUsed)} icon={<Database className="text-amber-500" size={16} />} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

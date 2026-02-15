@@ -47,10 +47,8 @@ export default function Dashboard({
     return (
         <div className="min-h-screen bg-[#FDFDFD] dark:bg-[#050505] text-[#1A1A1A] dark:text-neutral-100 flex flex-col md:flex-row transition-colors duration-500 selection:bg-blue-100">
 
-            {/* --- DESKTOP SIDEBAR --- */}
             <aside className="hidden md:flex w-72 border-r border-neutral-100 dark:border-neutral-900 flex-col bg-white dark:bg-[#050505] sticky top-0 h-screen z-20">
-              
-                {/* Branding */}
+            
                 <div className="p-8 flex items-center gap-3 group cursor-default">
                     <div className="relative">
                         <Note className="text-3xl text-neutral-900 dark:text-white transition-transform group-hover:rotate-12" />
@@ -59,7 +57,6 @@ export default function Dashboard({
                     <span className="font-serif italic text-xl tracking-tight">paperless</span>
                 </div>
 
-                {/* Navigation */}
                 <nav className="flex-1 px-4 space-y-1.5 mt-2">
                     <Link href="/dashboard" className="block">
                         <SidebarItem icon={<Home size={18} />} label="Workspace" active={pathname === "/dashboard"} />
@@ -79,7 +76,7 @@ export default function Dashboard({
                             onClick={toggleTheme}
                             className="w-full cursor-pointer flex items-center justify-between px-4 py-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all group"
                         >
-                            <span className="text-xs font-bold uppercase tracking-widest">{isDark ? "Luminance" : "Obsidian"}</span>
+                            <span className="text-xs font-bold uppercase tracking-widest">{isDark ? "Light" : "Dark"}</span>
                             {isDark ? <Sun size={16} /> : <Moon size={16} />}
                         </button>
                     </div>
@@ -100,15 +97,15 @@ export default function Dashboard({
                         </div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-3 p-2 border border-neutral-100 dark:border-neutral-800 rounded-2xl bg-white dark:bg-[#0d0d0d] shadow-sm">
+                    <div className="flex items-center justify-between gap-3 p-2 border border-neutral-100 dark:border-neutral-800 rounded-xl bg-white dark:bg-[#0d0d0d] shadow-sm">
                         <div className="flex items-center gap-3 overflow-hidden">
                             <div className="relative shrink-0">
                                 <img 
                                     src={session?.user?.image} 
                                     alt="profile" 
-                                    className="w-9 h-9 rounded-xl object-cover grayscale hover:grayscale-0 transition-all" 
+                                    className="w-9 h-9 rounded-xl object-cover hover:grayscale-0 transition-all" 
                                 />
-                                <div className="absolute -bottom-1 -right-1 bg-emerald-500 border-2 border-white dark:border-[#0d0d0d] w-3 h-3 rounded-full" />
+                                {/* <div className="absolute -bottom-1 -right-1 bg-emerald-500 border-2 border-white dark:border-[#0d0d0d] w-3 h-3 rounded-full" /> */}
                             </div>
                             <div className="min-w-0">
                                 <p className="text-xs font-bold text-neutral-800 dark:text-neutral-200 truncate">{session?.user?.name || "Probal Ghosh"}</p>
@@ -141,8 +138,8 @@ export default function Dashboard({
                 {children}
             </main>
 
-            <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] z-50">
-                <nav className="bg-white/80 dark:bg-black/80 backdrop-blur-2xl border border-neutral-200/50 dark:border-neutral-800/50 p-2 rounded-[2rem] shadow-2xl flex justify-between items-center px-4">
+            <div className="md:hidden w-full border-b border-neutral-300 fixed bottom-0 left-1/2 -translate-x-1/2 z-50">
+                <nav className="bg-white/80 dark:bg-black/80 backdrop-blur-2xl border border-neutral-200/50 dark:border-neutral-800/50 p-2 flex justify-between items-center px-4">
                     <MobileTab href="/dashboard" icon={<Home size={22} />} active={pathname === "/dashboard"} />
                     <MobileTab href="/dashboard/notes" icon={<FileText size={22} />} active={pathname.startsWith("/dashboard/notes")} />
                     <MobileTab href="/dashboard/upload" icon={<Upload size={22} />} active={pathname.startsWith("/dashboard/upload")} />
@@ -158,7 +155,7 @@ export default function Dashboard({
 
 function SidebarItem({ icon, label, active }: { icon: React.ReactNode; label: string; active?: boolean }) {
     return (
-        <div className={`group cursor-pointer flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 ${
+        <div className={`group cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
             active 
             ? "bg-neutral-900 dark:bg-white text-white dark:text-black shadow-lg shadow-neutral-200 dark:shadow-none" 
             : "text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 hover:text-neutral-900 dark:hover:text-white"

@@ -72,7 +72,7 @@ export default function Dashboard({
           <div className="pt-6 px-3">
             <button
               onClick={toggleTheme}
-              className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all group"
+              className="cursor-pointer w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all group"
             >
               <span className="text-[10px] font-bold uppercase tracking-widest">{isDark ? "Dark" : "Light"}</span>
               {isDark ? <Moon size={16} /> : <Sun size={16} />}
@@ -139,7 +139,7 @@ export default function Dashboard({
         {children}
       </main>
 
-      <div className="md:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full z-50">
+      <div className="md:hidden fixed -bottom-2 left-1/2 -translate-x-1/2 w-full z-50">
         <nav className="bg-white dark:bg-black border-t border-neutral-300 dark:border-neutral-800/50 py-3 flex justify-between items-center px-4">
           <MobileTab href="/dashboard" icon={<Home size={22} />} active={pathname === "/dashboard"} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />
           <MobileTab href="/dashboard/notes" icon={<FileText size={22} />} active={pathname.startsWith("/dashboard/notes")} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />

@@ -95,11 +95,11 @@ export default function Workspace({
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch gap-4 w-full md:w-auto">
-            {/* Refined Search Part */}
+            
             <div className={`relative flex items-center transition-all duration-500 group ${isFocused ? 'scale-[1.02]' : 'scale-100'}`}>
               <div className={`absolute inset-0 bg-blue-500/10 blur-xl transition-opacity duration-500 ${isFocused ? 'opacity-100' : 'opacity-0'}`} />
               
-              <div className={`relative flex items-center bg-white/40 dark:bg-neutral-900/40 backdrop-blur-2xl border rounded-2xl transition-all duration-300 ${isFocused ? 'border-neutral-900 dark:border-neutral-400 w-full md:w-72' : 'border-neutral-200 dark:border-neutral-800 w-full md:w-64'}`}>
+              <div className={`relative flex items-center bg-white/40 dark:bg-neutral-900/40 backdrop-blur-2xl border rounded-xl transition-all duration-300 ${isFocused ? 'border-neutral-900 dark:border-neutral-400 w-full md:w-72' : 'border-neutral-200 dark:border-neutral-800 w-full md:w-64'}`}>
                 <Search className={`ml-4 transition-colors ${isFocused ? 'text-neutral-900 dark:text-neutral-100' : 'text-neutral-400'}`} size={18} />
                 
                 <input

@@ -58,7 +58,7 @@ const Landing = () => {
           </div>
           <button 
             onClick={() => manageSignin()}
-            className="bg-[#1A1A1A] dark:bg-white text-white dark:text-black px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-500 transition-all shadow-sm"
+            className="cursor-pointer bg-[#1A1A1A] dark:bg-white text-white dark:text-black px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-medium hover:bg-blue-600 dark:hover:bg-blue-500 transition-all shadow-sm"
           >
             Sign in
           </button>
@@ -69,7 +69,7 @@ const Landing = () => {
       <main className="relative z-10 max-w-6xl mx-auto pt-10 md:pt-23 pb-16 md:pb-20 px-6">
         <div className="flex flex-col items-center text-center">
 
-          <h1 className="border-dashed border-2 py-3 px-4 md:py-1.5 md:px-5 text-4xl sm:text-6xl md:text-8xl font-light tracking-tight leading-[1.2] md:leading-[1.1] text-neutral-900 dark:text-white border-neutral-300 dark:border-neutral-800 bg-gray-400/10 backdrop-blur-[4px] w-full md:w-auto">
+          <h1 className="py-3 px-4 md:py-1.5 md:px-5 text-4xl sm:text-6xl md:text-8xl font-light tracking-tight leading-[1.2] md:leading-[1.1] text-neutral-900 dark:text-white border-neutral-300 dark:border-neutral-800 w-full md:w-auto">
             Thoughts, filed <br />
             <span className="font-serif italic text-neutral-400 dark:text-neutral-500">effortlessly.</span>
           </h1>
@@ -81,7 +81,7 @@ const Landing = () => {
 
           <div className="mt-8 md:mt-12 group relative w-full md:w-auto flex justify-center">
             <button 
-              className="relative z-10 w-full md:w-auto bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-8 py-4 rounded-xl text-base md:text-lg font-medium hover:border-neutral-900 dark:hover:border-white transition-all duration-500 flex items-center justify-center gap-3 shadow-xl shadow-neutral-100 dark:shadow-none"
+              className="cursor-pointer relative z-10 w-full md:w-auto bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-8 py-4 rounded-xl text-base md:text-lg font-medium hover:border-neutral-900 dark:hover:border-white transition-all duration-500 flex items-center justify-center gap-3 shadow-xl shadow-neutral-100 dark:shadow-none"
               onClick={()=>manageSignin()}
             >
               Get Started

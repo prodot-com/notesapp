@@ -201,7 +201,7 @@ export default function Workspace({
                       <div className="w-10 h-10 rounded-xl bg-white dark:bg-neutral-900 flex items-center justify-center text-neutral-400 border border-neutral-100 dark:border-neutral-800">
                         <HardDrive size={18} />
                       </div>
-                      <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate max-w-[200px]">
+                      <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400 truncate max-w-50">
                         {file.name}
                       </span>
                     </div>

@@ -41,7 +41,7 @@ const Landing = () => {
         </svg>
       </div>
 
-      <nav className="relative z-20 flex justify-between items-center px-5 md:px-8 py-4 md:py-6 backdrop-blur-md bg-white/70 dark:bg-[#0a0a0a]/70 border-b border-neutral-100 dark:border-neutral-800 sticky top-0 transition-colors">
+      <nav className="z-20 flex justify-between items-center px-5 md:px-8 py-4 md:py-6 backdrop-blur-md bg-white/70 dark:bg-[#0a0a0a]/70 border-b border-neutral-100 dark:border-neutral-800 sticky top-0 transition-colors">
         <div 
           className="flex items-center gap-3 md:gap-4 group cursor-pointer relative" 
           onClick={() => router.push('/')}
@@ -128,7 +128,7 @@ const Landing = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative w-full aspect-[16/9] bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-none overflow-hidden"
+            className="relative w-full aspect-video bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-none overflow-hidden"
           >
 
           <Image
@@ -160,7 +160,7 @@ const Landing = () => {
 
       <AnimatePresence>
         {loginModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -229,7 +229,7 @@ const Landing = () => {
             <span className="relative z-10 text-[10px] md:text-xs uppercase tracking-[0.15em] text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
               {link.label}
             </span>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-blue-500 transition-all duration-300 group-hover:w-1/3 opacity-50" />
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-0 h-1px bg-blue-500 transition-all duration-300 group-hover:w-1/3 opacity-50" />
           </a>
         ))}
       </div>
@@ -242,7 +242,7 @@ const Landing = () => {
         <h1 className="text-[4rem] sm:text-[8rem] md:text-[14rem] font-extrabold text-gray-200 dark:text-neutral-900 leading-none mb-1">
           paperless<span className="text-indigo-600 font-normal">.</span>
         </h1>
-        <div className="absolute bottom-0 w-full bg-gradient-to-t from-gray-500/20 dark:from-neutral-900/40 via-transparent to-transparent h-5"></div>
+        <div className="absolute bottom-0 w-full bg-linear-to-t from-gray-500/20 dark:from-neutral-900/40 via-transparent to-transparent h-5"></div>
       </div>
     </footer>
     </div>

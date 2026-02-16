@@ -79,7 +79,7 @@ export default function Dashboard({
 
         <div className="p-6 space-y-6">
           <div className="bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-100 dark:border-neutral-900 rounded-xl p-5 shadow-inner">
-            <div className="flex justify-between text-[10px] uppercase tracking-[0.1em] font-bold text-neutral-400 mb-3">
+            <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-3">
               <span>Storage</span>
               <span className={percent > 80 ? "text-red-500" : ""}>{roundedPercent}% out of 1GB</span>
             </div>

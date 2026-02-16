@@ -162,7 +162,7 @@ async function uploadFile(selectedFile?: File) {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.1 }}
-                className="min-h-[280px] relative border-2 border-blue-500/50 rounded-xl p-12 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d] overflow-hidden"
+                className="min-h-70 relative border-2 border-blue-500/50 rounded-xl p-12 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d] overflow-hidden"
               >
 
                 <div className="relative z-10 flex flex-col items-center">
@@ -193,7 +193,7 @@ async function uploadFile(selectedFile?: File) {
                   const droppedFile = e.dataTransfer.files[0];
                   if (droppedFile) uploadFile(droppedFile);
                 }}
-                className={`min-h-[280px] relative group border-2 border-dashed rounded-xl p-12 transition-all duration-500 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d] ${
+                className={`min-h-70 relative group border-2 border-dashed rounded-xl p-12 transition-all duration-500 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d] ${
                   isDragging
                     ? "border-blue-500 bg-blue-50/30 dark:bg-blue-900/10 scale-[0.99] shadow-2xl shadow-blue-500/5"
                     : "border-neutral-200 dark:border-neutral-800 shadow-xl shadow-neutral-100 dark:shadow-none hover:border-neutral-300 dark:hover:border-neutral-700"
@@ -234,7 +234,7 @@ async function uploadFile(selectedFile?: File) {
         <div className="mt-12 md:mt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-[10px] md:text-sm font-bold uppercase tracking-widest text-neutral-400 shrink-0">Stored Assets ({files.length})</h2>
-            <div className="h-[1px] flex-1 bg-neutral-100 dark:bg-neutral-900 mx-4 md:mx-6" />
+            <div className="h-1px flex-1 bg-neutral-100 dark:bg-neutral-900 mx-4 md:mx-6" />
           </div>
 
           <div className="space-y-4 md:space-y-3">
@@ -271,7 +271,7 @@ async function uploadFile(selectedFile?: File) {
                         <FileActionBtn icon={<Share2 size={16} />} onClick={() => handleShare(f.id)} label="Share" />
                     </div>
                     
-                    <div className="w-[1px] h-4 bg-neutral-100 dark:bg-neutral-800 mx-1 md:mx-2 shrink-0" />
+                    <div className="w-px h-4 bg-neutral-100 dark:bg-neutral-800 mx-1 md:mx-2 shrink-0" />
                     
                     <button 
                       onClick={() => handleDelete(f)}

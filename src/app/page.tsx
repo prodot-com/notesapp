@@ -122,13 +122,13 @@ const Landing = () => {
           </div>
         </div>
 
-      <div className="mt-24 md:mt-40 relative max-w-7xl md:max-w-6xl mx-auto px-4">
+      <div className="mt-24 md:mt-40 relative max-w-7xl md:max-w-6xl mx-auto md:px-4">
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative w-full aspect-video bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-none overflow-hidden"
+            className="relative w-full aspect-video bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] dark:shadow-none overflow-hidden"
           >
 
           <Image

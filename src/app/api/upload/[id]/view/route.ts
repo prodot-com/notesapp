@@ -23,7 +23,7 @@ export async function GET( req: Request,{ params }: { params: Promise<{ id: stri
   const { id } = await params;
 
   const file = await prisma.file.findUnique({ where: { id } });
-  console.log(file)
+  // console.log(file)
 
   if (!file || file.userId !== session.user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });

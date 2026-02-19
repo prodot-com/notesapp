@@ -81,6 +81,52 @@ export default function UploadPage() {
     }
   }, [status]);
 
+
+  async function handleFiles(selectedFiles: File[]) {
+    if (!selectedFiles.length) return;
+
+    setLoading(true);
+
+    try {
+      for (const file of selectedFiles) {
+        const validationError = validateFile(file);
+
+        if (validationError) {
+          toast.error(`${file.name}: ${validationError}`);
+          continue;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(`${file.name}: ${data.error || "Upload failed"}`);
+        } else {
+          toast.success(`${file.name} uploaded`);
+        }
+      }
+
+      // Refresh file list after upload batch
+      const refreshed = await fetch("/api/upload");
+      if (refreshed.ok) {
+        setFiles(await refreshed.json());
+      }
+
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
 async function uploadFile(selectedFile?: File) {
   const fileToUpload = selectedFile || file;
   if (!fileToUpload) return;
@@ -250,8 +296,10 @@ async function uploadFile(selectedFile?: File) {
                 onDrop={(e) => {
                   e.preventDefault();
                   setIsDragging(false);
-                  const droppedFile = e.dataTransfer.files[0];
-                  if (droppedFile) uploadFile(droppedFile);
+                  const droppedFiles = Array.from(e.dataTransfer.files);
+                  if (droppedFiles.length > 0){
+                    handleFiles(droppedFiles);
+                  }
                 }}
                 className={`min-h-70 relative group border-2 border-dashed rounded-xl p-12 transition-all duration-500 flex flex-col items-center justify-center bg-white dark:bg-[#0d0d0d] ${
                   isDragging
@@ -282,8 +330,18 @@ async function uploadFile(selectedFile?: File) {
                   <input
                     type="file"
                     className="hidden"
+                    
                     accept=".pdf,.doc,.docx,.pptx,.txt,.jpg,.jpeg,.png,.webp,.gif,.zip"
-                    onChange={(e) => uploadFile(e.target.files?.[0] || undefined)}
+                    onChange={(e) => {
+                      if(!e.target.files) return;
+                      const selectedFiles = Array.from(e.target.files);
+
+                      if(selectedFiles.length > 0){
+                        handleFiles(selectedFiles);
+                      }
+
+                      e.target.value ="";
+                    }}
                   />
                 </label>
               </motion.div>

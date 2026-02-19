@@ -218,7 +218,7 @@ async function uploadFile(selectedFile?: File) {
               >
                 <div className="absolute inset-0 pointer-events-none">
                   <div className="absolute -top-40 left-1/2 -translate-x-1/2 
-                                  w-[600px] h-[600px] 
+                                  w-150 h-150 
                                   bg-blue-500/10 dark:bg-blue-500/5 
                                   blur-[120px] rounded-full" />
                 </div>
@@ -227,8 +227,8 @@ async function uploadFile(selectedFile?: File) {
                   <motion.div
                     animate={{ x: ["-120%", "120%"] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-0 h-[1px] w-[50%] 
-                              bg-gradient-to-r from-transparent via-blue-500/70 to-transparent 
+                    className="absolute top-0 h-px w-[50%] 
+                              bg-linear-to-r from-transparent via-blue-500/70 to-transparent 
                               blur-sm opacity-60"
                   />
                 </div>
@@ -266,12 +266,12 @@ async function uploadFile(selectedFile?: File) {
                     </p>
                   </div>
 
-                  <div className="w-full h-[4px] bg-neutral-200/60 dark:bg-neutral-800 rounded-full overflow-hidden">
+                  <div className="w-full h-1 bg-neutral-200/60 dark:bg-neutral-800 rounded-full overflow-hidden">
                     <motion.div
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: 3.5, ease: "easeInOut" }}
-                      className="relative h-full bg-gradient-to-r from-blue-500 to-indigo-500"
+                      className="relative h-full bg-linear-to-r from-blue-500 to-indigo-500"
                     >
                       <div className="absolute inset-0 blur-sm opacity-60 bg-blue-400" />
                     </motion.div>
@@ -329,8 +329,8 @@ async function uploadFile(selectedFile?: File) {
                   Browse File
                   <input
                     type="file"
+                    multiple
                     className="hidden"
-                    
                     accept=".pdf,.doc,.docx,.pptx,.txt,.jpg,.jpeg,.png,.webp,.gif,.zip"
                     onChange={(e) => {
                       if(!e.target.files) return;

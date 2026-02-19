@@ -24,8 +24,8 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[#1A1A1A] font-sans selection:bg-blue-100 overflow-x-hidden transition-colors duration-300">
-      <div className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-0 w-[140%] h-[400px] bg-gradient-to-b from-orange-400 via-blue-400 to-transparent dark:from-orange-600 dark:via-blue-600" />
+      <div className="absolute top-0 left-0 right-0 h-125 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-0 w-[140%] h-100 bg-linear-to-r from-orange-400 via-blue-400 to-transparent dark:from-orange-600 dark:via-blue-600" />
       </div>
       
       <div className="fixed inset-0 z-0 opacity-20 pointer-events-none">
@@ -136,7 +136,7 @@ const Landing = () => {
 
       <AnimatePresence>
         {loginModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md bg-white/20">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4 backdrop-blur-md bg-white/20">
             <motion.div 
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -196,7 +196,7 @@ const Landing = () => {
               <span className="relative z-10 text-[10px] md:text-xs uppercase tracking-[0.15em] text-neutral-500 group-hover:text-neutral-900 transition-colors">
                 {link.label}
               </span>
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-blue-500 transition-all duration-300 group-hover:w-1/3 opacity-50" />
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-0 h-px bg-blue-500 transition-all duration-300 group-hover:w-1/3 opacity-50" />
             </a>
           ))}
         </div>

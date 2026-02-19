@@ -24,12 +24,10 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[#1A1A1A] font-sans selection:bg-blue-100 overflow-x-hidden transition-colors duration-300">
-      {/* --- SARVAM STYLE CENTRAL ORB GLOW --- */}
       <div className="absolute top-0 left-0 right-0 h-[500px] pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-0 w-[140%] h-[400px] bg-gradient-to-b from-orange-400 via-blue-400 to-transparent dark:from-orange-600 dark:via-blue-600" />
       </div>
       
-      {/* Dots Pattern */}
       <div className="fixed inset-0 z-0 opacity-20 pointer-events-none">
         <svg width="100%" height="100%">
           <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
@@ -39,7 +37,6 @@ const Landing = () => {
         </svg>
       </div>
 
-      {/* --- REFINED SARVAM-STYLE NAV --- */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 flex justify-between items-center
         px-6 py-3 rounded-xl backdrop-blur-[7px] bg-white/30 border border-white/20">
         <div 
@@ -57,13 +54,10 @@ const Landing = () => {
           </div>
         </div>
         
-        {/* Sarvam Center Links Style */}
         <div className="hidden lg:flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.25em] text-neutral-500">
-          <Link href="/dashboard" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
-            Workspace <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
-          </Link>
+          
           <Link href="https://github.com/prodot-com/paperless" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
-            Developers <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
+            Developer <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
           </Link>
           <Link href="https://probalghosh.dev" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
             Company <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
@@ -89,13 +83,6 @@ const Landing = () => {
 
       <main className="relative z-10 max-w-6xl mx-auto pt-32 md:pt-48 pb-16 md:pb-24 px-6">
         <div className="flex flex-col items-center text-center">
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 mb-10"
-          >
-            Built by Probal Ghosh • India
-          </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -128,7 +115,6 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* Mockup Section */}
         <div className="mt-24 md:mt-40 relative max-w-6xl mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
@@ -226,7 +212,7 @@ const Landing = () => {
         </p>
 
         <div className="pointer-events-none select-none mt-10 text-center relative">
-          <h1 className="text-[4rem] sm:text-[8rem] md:text-[14rem] font-extrabold text-gray-100 leading-none mb-1">
+          <h1 className="text-[5rem] sm:text-[8rem] md:text-[14rem] font-extrabold text-gray-100 leading-none md:mb-1">
             paperless<span className="text-indigo-600 font-normal">.</span>
           </h1>
           {/* <div className="absolute bottom-0 w-full bg-gradient-to-t from-gray-500/10 via-transparent to-transparent h-5"></div> */}

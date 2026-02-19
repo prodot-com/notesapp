@@ -25,7 +25,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-[#1A1A1A] font-sans selection:bg-blue-100 overflow-x-hidden transition-colors duration-300">
       <div className="absolute top-0 left-0 right-0 h-125 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-0 w-[140%] h-100 bg-linear-to-r from-orange-400 via-blue-400 to-transparent dark:from-orange-600 dark:via-blue-600" />
+        <div className="absolute top-0 w-[140%] h-100 bg-linear-to-b from-orange-400 via-blue-400 to-transparent dark:from-orange-600 dark:via-blue-600" />
       </div>
       
       <div className="fixed inset-0 z-0 opacity-20 pointer-events-none">

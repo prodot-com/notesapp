@@ -66,22 +66,13 @@ const Landing = () => {
             <span className="font-serif italic text-neutral-300">perfectly structured.</span>
           </motion.h1>
 
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="max-w-xl text-lg md:text-xl text-neutral-500 font-light leading-relaxed mb-12"
-          >
-            The hybrid space where notes meet files. A digital archive designed for the minimalists who demand organization without the effort.
-          </motion.p>
-
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
             className="flex gap-4"
           >
-             <button 
+            <button 
               onClick={manageSignin}
               className="group bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:pr-10 transition-all flex items-center gap-3 shadow-2xl shadow-black/20"
             >
@@ -92,38 +83,56 @@ const Landing = () => {
         </div>
       </main>
 
-      {/* Modern Footer */}
-      <footer className="bg-white border-t border-black/[0.05] pt-20 pb-10">
+      <footer className="bg-white border-t border-neutral-100 pt-20">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-20">
-            <div className="max-w-xs">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
-                  <Note className="text-white w-4 h-4" />
+          <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-24">
+  
+            <div className="max-w-sm">
+              <div className="flex items-center gap-3 mb-6 group cursor-default">
+                <div className="w-10 h-10 bg-neutral-900 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                  <Note className="text-white w-6 h-6" />
                 </div>
-                <span className="font-bold tracking-tighter uppercase">paperless</span>
+                <div className="flex flex-col">
+                  <span className="font-bold tracking-tighter uppercase text-xl leading-none">paperless</span>
+                </div>
               </div>
-              <p className="text-sm text-neutral-500 leading-relaxed">
-                © 2026 Paperless Workspace. All Rights Reserved.
-              </p>
             </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
-              <FooterGroup title="Product" links={["Features", "Desktop App", "Mobile"]} />
-              <FooterGroup title="Company" links={["About", "Privacy", "Status"]} />
-              <FooterGroup title="Connect" links={["Github", "Twitter", "Email"]} />
+
+            <div className="flex flex-col items-start md:items-end gap-8">
+              <div className="flex flex-wrap gap-x-10 gap-y-4">
+                {[
+                  { label: "Github", href: "https://github.com/prodot-com/paperless" },
+                  { label: "Contact", href: "https://probalghosh.dev" },
+                  { label: "License", href: "https://github.com/prodot-com/paperless/tree/main?tab=GPL-3.0-1-ov-file#readme" },
+                  { label: "Documentation", href: "https://github.com/prodot-com/paperless/blob/main/README.md" },
+                ].map((link) => (
+                  <Link 
+                    key={link.label} 
+                    href={link.href} 
+                    className="text-[10px] uppercase tracking-[0.2em] font-bold text-neutral-400 hover:text-blue-500 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+              
+              <div className="text-right">
+                <p className="text-[10px] uppercase tracking-widest text-neutral-300 font-medium">
+                  Build by <span className="text-neutral-900 font-bold">Probal Ghosh</span>
+                </p>
+                <p className="text-[10px] uppercase tracking-widest text-neutral-300 mt-1">
+                  © 2026 Paperless
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-black/[0.05] gap-6">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
-              © 2026 Paperless Workspace. All Rights Reserved.
-            </p>
-            <div className="flex items-center gap-8">
-              <Link href="#" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-black">Terms</Link>
-              <Link href="#" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-black">Privacy</Link>
-            </div>
-          </div> */}
+          <div className="relative text-center select-none">
+            <h2 className="text-[12vw] font-black text-neutral-500 leading-none tracking-tighter">
+              PAPERLESS
+            </h2>
+            <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-white via-white/40 to-transparent" />
+          </div>
         </div>
       </footer>
 

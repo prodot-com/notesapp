@@ -24,10 +24,6 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] font-sans selection:bg-indigo-100 selection:text-indigo-900">
-      {/* Dynamic Background Noise/Texture */}
-      {/* <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" /> */}
-      
-      {/* Minimalist Floating Nav */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 flex justify-between items-center
         px-6 py-3 rounded-2xl backdrop-blur-xl bg-white/60 border border-black/[0.05] shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         
@@ -39,9 +35,12 @@ const Landing = () => {
         </div>
         
         <div className="hidden md:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
-          <Link href="#features" className="hover:text-black transition-colors">Capability</Link>
-          <Link href="https://github.com/prodot-com/paperless" className="hover:text-black transition-colors">Source</Link>
-          <Link href="https://probalghosh.dev" className="hover:text-black transition-colors">Curator</Link>
+          <Link href="https://github.com/prodot-com/paperless" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
+            Developer <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
+          </Link>
+          <Link href="https://probalghosh.dev" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
+            Company <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
+          </Link>
         </div>
 
         <div className="flex items-center gap-3">
@@ -57,13 +56,6 @@ const Landing = () => {
       <main className="relative pt-44 pb-24 px-6 max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="flex flex-col items-center text-center mb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-bold uppercase tracking-widest mb-8"
-          >
-            <Sparkles size={12} /> High-Fidelity Workspace
-          </motion.div>
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -99,25 +91,6 @@ const Landing = () => {
             </button>
           </motion.div>
         </div>
-
-        {/* Feature Grid - The "Architecture" */}
-        <section id="features" className="grid md:grid-cols-3 gap-6 mb-40">
-          <FeatureCard 
-            icon={<Layers size={20} />}
-            title="Unified Context"
-            desc="Link PDFs, images, and voice notes directly into your markdown sentences."
-          />
-          <FeatureCard 
-            icon={<Search size={20} />}
-            title="Deep Recall"
-            desc="AI-powered search that finds text inside your uploaded scans and handwritten notes."
-          />
-          <FeatureCard 
-            icon={<Shield size={20} />}
-            title="Private by Design"
-            desc="Local-first synchronization. Your data stays within your encrypted vault."
-          />
-        </section>
       </main>
 
       {/* Modern Footer */}

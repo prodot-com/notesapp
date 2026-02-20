@@ -6,7 +6,6 @@ import Note from "@/lib/logo";
 import { ArrowRight, Github, X, Sparkles, Layers, Shield, Search } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 
 const Landing = () => {
@@ -105,7 +104,7 @@ const Landing = () => {
                 <span className="font-bold tracking-tighter uppercase">paperless</span>
               </div>
               <p className="text-sm text-neutral-500 leading-relaxed">
-                Redefining digital documentation through minimalist architecture and intelligent organization.
+                © 2026 Paperless Workspace. All Rights Reserved.
               </p>
             </div>
             
@@ -116,7 +115,7 @@ const Landing = () => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-black/[0.05] gap-6">
+          {/* <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-black/[0.05] gap-6">
             <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
               © 2026 Paperless Workspace. All Rights Reserved.
             </p>
@@ -124,17 +123,10 @@ const Landing = () => {
               <Link href="#" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-black">Terms</Link>
               <Link href="#" className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 hover:text-black">Privacy</Link>
             </div>
-          </div>
-
-          {/* <div className="mt-20 overflow-hidden pointer-events-none select-none">
-             <h1 className="text-[15vw] font-black text-black/[0.02] leading-none text-center">
-              PAPERLESS
-             </h1>
           </div> */}
         </div>
       </footer>
 
-      {/* Re-styled Login Modal */}
       <AnimatePresence>
         {loginModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
@@ -173,8 +165,6 @@ const Landing = () => {
     </div>
   );
 };
-
-// --- Helper Components ---
 
 const FeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
   <div className="p-10 rounded-[32px] bg-white border border-black/[0.03] hover:border-indigo-200 transition-all group">

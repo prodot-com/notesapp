@@ -8,6 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Logo from "@/lib/logo";
+import Particles from "@/components/ui/particles";
 
 const Landing = () => {
   const [loginModal, setLoginModal] = useState(false);
@@ -46,6 +47,9 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-[#F9F9F7] dark:bg-[#0A0A0A] text-[#1A1A1A] dark:text-[#EDEDED] font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 transition-colors duration-500">
+
+      <Particles/>
+
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 flex justify-between items-center
         px-6 py-3 rounded-xl backdrop-blur-xl bg-white/60 dark:bg-black/40 border border-black/15 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         

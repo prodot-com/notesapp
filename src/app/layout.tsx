@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Paperless",
+  title: "paperless",
   description: "your personal vault",
   icons: {
     icon: [

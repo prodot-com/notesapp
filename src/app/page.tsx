@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Note from "@/lib/logo";
-import { ArrowRight, Github, X, Sparkles, Layers, Shield, Search } from "lucide-react";
+import { ArrowRight, X, Moon, Sun } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 
 const Landing = () => {
   const [loginModal, setLoginModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => setMounted(true), []);
 
   const manageSignin = () => {
     if (session) {
@@ -21,60 +26,68 @@ const Landing = () => {
     }
   };
 
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] font-sans selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-[#F9F9F7] dark:bg-[#0A0A0A] text-[#1A1A1A] dark:text-[#EDEDED] font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 transition-colors duration-500">
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 flex justify-between items-center
-        px-6 py-3 rounded-2xl backdrop-blur-xl bg-white/60 border border-black/[0.05] shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
+        px-6 py-3 rounded-xl backdrop-blur-xl bg-white/60 dark:bg-black/40 border border-black/15 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         
         <div className="flex items-center gap-2 group cursor-pointer" onClick={() => router.push('/')}>
-          <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center transition-transform group-hover:rotate-6">
-            <Note className="text-white w-5 h-5" />
+          <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center transition-transform group-hover:rotate-6">
+            <Note className="text-white dark:text-black w-5 h-5" />
           </div>
-          <span className="text-sm font-bold tracking-tighter uppercase">paperless</span>
+          <span className="text-sm font-bold tracking-tighter uppercase text-black dark:text-white">paperless</span>
         </div>
         
-        <div className="hidden md:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
-          <Link href="https://github.com/prodot-com/paperless" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
+        <div className="hidden md:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-500">
+          <Link href="https://github.com/prodot-com/paperless" className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5 group">
             Developer <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
           </Link>
-          <Link href="https://probalghosh.dev" className="hover:text-neutral-900 transition-colors flex items-center gap-1.5 group">
+          <Link href="https://probalghosh.dev" className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5 group">
             Company <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
           </Link>
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-neutral-600 dark:text-neutral-400"
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
           <button 
             onClick={manageSignin}
-            className="bg-black text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-black/10"
+            className="cursor-pointer bg-black dark:bg-white text-white dark:text-black px-5 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 dark:hover:bg-indigo-400 transition-all active:scale-95 shadow-lg shadow-black/10"
           >
-            Enter Vault
+            Vault
           </button>
         </div>
       </nav>
 
-      <main className="relative pt-44 pb-24 px-6 max-w-7xl mx-auto">
-        
+      <main className="relative pt-56 pb-24 px-6 max-w-7xl mx-auto">
+        <div
+        className="absolute top-0 w-full h-14 border border-black"
+        ></div>
         <div className="flex flex-col items-center text-center mb-32">
-
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-6xl md:text-[100px] font-medium tracking-tight leading-[0.9] text-black mb-10"
+            className="text-6xl md:text-[100px] font-medium tracking-tight leading-[0.9] text-black dark:text-white mb-10"
           >
             Your thoughts, <br />
-            <span className="font-serif italic text-neutral-300">perfectly structured.</span>
+            <span className="font-serif italic text-neutral-300 dark:text-neutral-700">perfectly structured.</span>
           </motion.h1>
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex gap-4"
+            transition={{ delay: 0.2 }}
           >
             <button 
               onClick={manageSignin}
-              className="group bg-black text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:pr-10 transition-all flex items-center gap-3 shadow-2xl shadow-black/20"
+              className="cursor-pointer group bg-black dark:bg-white text-white dark:text-black px-8 py-4 rounded-2xl text-lg font-semibold hover:pr-10 transition-all flex items-center gap-1 shadow-2xl shadow-black/20 dark:shadow-white/5"
             >
               Start Writing
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -83,31 +96,21 @@ const Landing = () => {
         </div>
       </main>
 
-      <footer className="bg-white border-t border-neutral-200 pt-20">
-        <div className="max-w-8xl mx-auto md:px-25 px-6">
+      <footer className="bg-white dark:bg-[#0A0A0A] border-t border-neutral-200 dark:border-white/5 pt-20 transition-colors duration-500">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
-
             <div className="max-w-sm">
-              <div className="flex items-center gap-3 mb-6 group cursor-default">
-                
-                <div className="relative w-10 h-10 bg-neutral-900 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:rotate-6">
-                  <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700 rounded-2xl" />
-                  <Note className="relative text-white w-6 h-6" />
+              <div className="flex items-center gap-3 mb-6 group">
+                <div className="w-10 h-10 bg-neutral-900 dark:bg-white rounded-2xl flex items-center justify-center transition-all group-hover:rotate-6">
+                  <Note className="text-white dark:text-black w-6 h-6" />
                 </div>
-
-                <div className="flex flex-col">
-                  <span className="font-extrabold tracking-tight uppercase text-xl text-neutral-900 leading-none">
-                    Paperless
-                  </span>
-                  <span className="text-xs text-neutral-400 tracking-wide mt-1">
-                    Smart document storage
-                  </span>
-                </div>
+                <span className="font-extrabold tracking-tight uppercase text-xl text-neutral-900 dark:text-white leading-none">
+                  Paperless
+                </span>
               </div>
             </div>
 
             <div className="flex flex-col items-start md:items-end gap-8 w-full md:w-auto">
-              
               <div className="flex flex-wrap gap-x-10 gap-y-4">
                 {[
                   { label: "Github", href: "https://github.com/prodot-com/paperless" },
@@ -118,34 +121,26 @@ const Landing = () => {
                   <Link 
                     key={link.label}
                     href={link.href}
-                    target="_blank"
-                    className="relative text-xs uppercase tracking-[0.18em] font-semibold text-neutral-500 transition-colors duration-300 hover:text-neutral-900"
+                    className="text-xs uppercase tracking-[0.18em] font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
                   >
                     {link.label}
-                    <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-neutral-900 transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                 ))}
               </div>
-              
               <div className="text-center md:text-right w-full">
                 <p className="text-xs uppercase tracking-widest text-neutral-400 font-medium">
-                  Built by <span className="text-neutral-900 font-semibold">Probal Ghosh</span>
-                </p>
-                <p className="text-xs uppercase tracking-widest text-neutral-300 mt-1">
-                  © 2026 Paperless
+                  Built by <span className="text-neutral-900 dark:text-white font-semibold">Probal Ghosh</span>
                 </p>
               </div>
-
             </div>
           </div>
 
-          <div className="w-full relative text-center select-none">
-            <h2 className="text-[17vw] md:text-[12vw] font-black text-neutral-500 leading-none tracking-tighter">
+          <div className="w-full relative text-center select-none overflow-hidden">
+            <h2 className="text-[16vw] md:text-[12vw] font-black text-neutral-300 dark:text-neutral-800 leading-none tracking-tighter transition-colors duration-500">
               PAPERLESS<span className="text-indigo-600">.</span>
             </h2>
-            <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-white via-white/40 to-transparent" />
+            <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-[#F9F9F7] dark:from-[#0A0A0A] via-transparent to-transparent" />
           </div>
-
         </div>
       </footer>
 
@@ -155,26 +150,23 @@ const Landing = () => {
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setLoginModal(false)}
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm"
             />
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-md bg-[#F9F9F7] rounded-[32px] shadow-2xl p-12 overflow-hidden border border-white"
+              className="relative w-full max-w-md bg-[#F9F9F7] dark:bg-[#111] rounded-[32px] shadow-2xl p-12 border border-white dark:border-white/10"
             >
-              <button onClick={() => setLoginModal(false)} className="absolute top-8 right-8 text-neutral-400 hover:text-black transition-colors"><X size={24} /></button>
-              
+              <button onClick={() => setLoginModal(false)} className="absolute top-8 right-8 text-neutral-400 hover:text-black dark:hover:text-white transition-colors"><X size={24} /></button>
               <div className="text-center">
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-black/20">
-                  <Note className="text-3xl text-white" />
+                <div className="w-16 h-16 bg-black dark:bg-white rounded-2xl flex items-center justify-center mx-auto mb-8">
+                  <Note className="text-3xl text-white dark:text-black" />
                 </div>
-                <h2 className="text-3xl font-medium tracking-tight mb-3">Welcome to the Vault</h2>
-                <p className="text-neutral-500 mb-10 font-light">Your focus is waiting for you.</p>
-
+                <h2 className="text-3xl font-medium tracking-tight mb-8 dark:text-white">Welcome to the Vault</h2>
                 <button
                   onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-                  className="w-full flex items-center justify-center gap-4 bg-white border border-black/[0.05] py-4 rounded-2xl font-semibold hover:bg-neutral-50 transition-all shadow-sm active:scale-[0.98]"
+                  className="w-full flex items-center justify-center gap-4 bg-white dark:bg-neutral-900 border border-black/[0.05] dark:border-white/10 py-4 rounded-xl font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all text-black dark:text-white"
                 >
                   <GoogleIcon />
                   Continue with Google

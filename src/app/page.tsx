@@ -47,13 +47,13 @@ const Landing = () => {
             onClick={manageSignin}
             className="bg-black text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-indigo-600 transition-all active:scale-95 shadow-lg shadow-black/10"
           >
-            {session ? "Dashboard" : "Enter Vault"}
+            Enter Vault
           </button>
         </div>
       </nav>
 
       <main className="relative pt-44 pb-24 px-6 max-w-7xl mx-auto">
-        {/* Hero Section */}
+        
         <div className="flex flex-col items-center text-center mb-32">
 
           <motion.h1 
@@ -84,7 +84,7 @@ const Landing = () => {
       </main>
 
       <footer className="bg-white border-t border-neutral-100 pt-20">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-8xl mx-auto px-25">
           <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-24">
   
             <div className="max-w-sm">
@@ -127,11 +127,11 @@ const Landing = () => {
             </div>
           </div>
 
-          <div className="relative text-center select-none">
-            <h2 className="text-[12vw] font-black text-neutral-500 leading-none tracking-tighter">
-              PAPERLESS
+          <div className="border w-full border-black relative text-center select-none">
+            <h2 className="text-[17vw] md:text-[12vw] font-black text-neutral-500 leading-none tracking-tighter">
+              PAPERLESS<span className="text-indigo-600">.</span>
             </h2>
-            <div className="absolute bottom-0 w-full h-full bg-gradient-to-t from-white via-white/40 to-transparent" />
+            <div className="border border-black absolute bottom-0 w-full h-full bg-gradient-to-t from-white via-white/40 to-transparent" />
           </div>
         </div>
       </footer>
@@ -174,25 +174,6 @@ const Landing = () => {
     </div>
   );
 };
-
-const FeatureCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
-  <div className="p-10 rounded-[32px] bg-white border border-black/[0.03] hover:border-indigo-200 transition-all group">
-    <div className="w-12 h-12 rounded-2xl bg-neutral-50 flex items-center justify-center mb-6 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
-      {icon}
-    </div>
-    <h3 className="text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-neutral-500 leading-relaxed font-light">{desc}</p>
-  </div>
-);
-
-const FooterGroup = ({ title, links }: { title: string, links: string[] }) => (
-  <div className="flex flex-col gap-4">
-    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black">{title}</span>
-    {links.map(link => (
-      <Link key={link} href="#" className="text-sm text-neutral-500 hover:text-black transition-colors font-light">{link}</Link>
-    ))}
-  </div>
-);
 
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24">

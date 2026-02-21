@@ -14,7 +14,7 @@ const Landing = () => {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   useEffect(() => setMounted(true), []);
 
@@ -24,6 +24,22 @@ const Landing = () => {
     } else {
       setLoginModal(true);
     }
+  };
+
+  useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
+      e.preventDefault();
+      setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [resolvedTheme, setTheme]);
+
+    const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   if (!mounted) return null;
@@ -51,7 +67,7 @@ const Landing = () => {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-neutral-600 dark:text-neutral-400"
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}

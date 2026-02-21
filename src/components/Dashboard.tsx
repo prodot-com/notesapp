@@ -49,7 +49,7 @@ export default function Dashboard({
 
   useEffect(()=>{
     setMounted(true);
-  })
+  },[])
 
   useEffect(() => {
     setLoadingTab(null);

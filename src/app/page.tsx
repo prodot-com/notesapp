@@ -5,6 +5,8 @@ import { ArrowRight, X, Moon, Sun, HardDrive, Zap, Box, Lock, Check, FileText } 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Logo from "@/lib/logo";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // --- Types ---
 interface LogoProps {
@@ -47,6 +49,8 @@ const Landing: React.FC = () => {
   const [loginModal, setLoginModal] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [isDark, setIsDark] = useState<boolean>(false);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -68,7 +72,13 @@ const Landing: React.FC = () => {
   }, []);
 
   const toggleTheme = () => setIsDark(!isDark);
-  const manageSignin = () => setLoginModal(true);
+    const manageSignin = () => {
+    if (session) {
+      router.push('/dashboard');
+    } else {
+      setLoginModal(true);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -108,7 +118,7 @@ const Landing: React.FC = () => {
               onClick={manageSignin}
               className="cursor-pointer bg-black dark:bg-white text-white dark:text-black px-4 md:px-6 py-2 md:py-2.5 rounded-xl text-xs font-bold hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all active:scale-95 shadow-lg shadow-black/10 dark:shadow-white/5"
             >
-              Access Here
+              {session ? "Access Here": "Join"}
             </button>
           </div>
         </nav>
@@ -447,10 +457,7 @@ const Landing: React.FC = () => {
                   <p className="text-sm sm:text-base text-neutral-500 mb-6 sm:mb-8 max-w-xs mx-auto font-medium">Access your digital vault and manage your IP securely.</p>
                   
                   <button
-                    onClick={() => {
-                      alert("In production, this triggers: signIn('google', { callbackUrl: '/dashboard' })");
-                      setLoginModal(false);
-                    }}
+                    onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                     className="cursor-pointer w-full flex items-center justify-center gap-3 bg-transparent border-2 border-black/20 dark:border-white/20 py-3.5 sm:py-4 rounded-xl font-bold hover:border-black dark:hover:border-white transition-all text-black dark:text-white active:scale-95 text-base sm:text-lg"
                   >
                     <GoogleIcon />

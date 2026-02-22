@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight, X, Moon, Sun, HardDrive, Zap, Box, Lock, Check, FileText } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 
-// --- Types ---
 interface LogoProps {
   className?: string;
 }
@@ -14,7 +14,6 @@ interface FAQItemProps {
   answer: string;
 }
 
-// --- Minimalist Logo Component ---
 const Logo: React.FC<LogoProps> = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path d="M4 6C4 4.89543 4.89543 4 6 4H14L20 10V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -24,7 +23,6 @@ const Logo: React.FC<LogoProps> = ({ className }) => (
   </svg>
 );
 
-// --- FAQ Item Component ---
 const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
@@ -84,11 +82,9 @@ const Landing: React.FC = () => {
     <div className={`${isDark ? 'dark' : ''} min-h-screen font-sans selection:bg-black/10 dark:selection:bg-white/20 transition-colors duration-500`}>
       <div className="min-h-screen bg-[#ffffff] dark:bg-[#0A0A0A] text-[#1A1A1A] dark:text-[#EDEDED] relative overflow-hidden transition-colors duration-500">
 
-        {/* --- Subtle Background Ambient Glows (Toned down for higher contrast) --- */}
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-neutral-200/50 dark:bg-neutral-800/30 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-neutral-200/50 dark:bg-neutral-800/30 blur-[120px] rounded-full pointer-events-none" />
-
-        {/* --- Navigation (Preserved Glassmorphism) --- */}
+y
         <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 flex justify-between items-center px-6 py-3 rounded-2xl backdrop-blur-xl bg-white/60 dark:bg-black/40 border border-black/5 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth'})}>
             <div className="flex items-center justify-center p-1.5 rounded-lg bg-black dark:bg-white transition-transform group-hover:scale-105">
@@ -98,9 +94,12 @@ const Landing: React.FC = () => {
           </div>
           
           <div className="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-500 dark:text-neutral-400">
-            <a href="#features" className="hover:text-black dark:hover:text-white transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-black dark:hover:text-white transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-black dark:hover:text-white transition-colors">FAQ</a>
+            <Link href="https://github.com/prodot-com/paperless" className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5 group">
+            Developer <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
+            </Link>
+            <Link href="https://probalghosh.dev" className="hover:text-neutral-900 dark:hover:text-white transition-colors flex items-center gap-1.5 group">
+              Company <ArrowRight size={10} className="transition-transform group-hover:translate-x-1"/>
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">
@@ -120,15 +119,13 @@ const Landing: React.FC = () => {
           </div>
         </nav>
 
-        {/* --- Hero Section --- */}
         <main className="relative pt-44 pb-20 px-6 max-w-5xl mx-auto z-10 flex flex-col items-center text-center">
           
-          {/* Floating Line Art - Left */}
           <motion.div 
             initial={{ opacity: 0, x: -20, y: 10 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="hidden lg:block absolute left-0 top-20 w-56 h-56 text-black dark:text-white opacity-80 pointer-events-none"
+            className="hidden lg:block absolute -left-7 top-16 w-56 h-56 text-black dark:text-white opacity-80 pointer-events-none"
           >
             <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M40 140 L100 170 L160 140 M40 100 L100 130 L160 100 L100 70 Z" />
@@ -143,7 +140,6 @@ const Landing: React.FC = () => {
             </svg>
           </motion.div>
 
-          {/* Floating Line Art - Right */}
           <motion.div 
             initial={{ opacity: 0, x: 20, y: -10 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
@@ -157,15 +153,7 @@ const Landing: React.FC = () => {
               <circle cx="160" cy="130" r="4" fill="currentColor" />
             </svg>
           </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 text-sm font-medium mb-10 border border-black/5 dark:border-white/10 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-          >
-            Now it is time to organize <ArrowRight size={14} className="text-neutral-500" />
-          </motion.div>
-
+          
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -203,48 +191,30 @@ const Landing: React.FC = () => {
               onClick={manageSignin}
               className="w-full sm:w-auto cursor-pointer px-8 py-3.5 rounded-xl text-sm font-bold text-black dark:text-white bg-transparent border-2 border-black dark:border-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
             >
-              Enter Vault <FileText size={18} />
+              Start Organizing
             </button>
             <button 
               onClick={manageSignin}
               className="w-full sm:w-auto cursor-pointer px-8 py-3.5 rounded-xl text-sm font-bold text-white dark:text-black bg-black dark:bg-white border-2 border-black dark:border-white hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 dark:shadow-white/10"
             >
-              Purchase Premium <Zap size={18} fill="currentColor" />
+              Upgrade to Pro
             </button>
           </motion.div>
 
-          {/* Social Proof Avatars */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex flex-col items-center gap-4 relative z-20"
-          >
-            <div className="flex -space-x-3">
-              {[1,2,3,4,5].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-black bg-neutral-200 dark:bg-neutral-800 overflow-hidden flex items-center justify-center text-xs font-bold text-black dark:text-white relative">
-                  U{i}
-                </div>
-              ))}
-            </div>
-            <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Trusted by 1000+ developers</p>
-          </motion.div>
         </main>
 
-        {/* --- High Contrast Features Section --- */}
         <section id="features" className="relative z-10 py-32 px-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-20 text-center md:text-left">
-              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-black dark:text-white mb-6">Engineered for focus.</h2>
-              <p className="text-neutral-500 dark:text-neutral-400 text-xl max-w-2xl mx-auto md:mx-0 font-light">Every constraint is a feature. Paperless enforces minimalism to keep your digital vault clean, fast, and secure.</p>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-black dark:text-white mb-6">Built for Focus. Designed for Control.</h2>
+              <p className="text-neutral-500 dark:text-neutral-400 text-xl max-w-2xl mx-auto md:mx-0 font-light">Paperless keeps your notes and files structured, searchable, and secure — without clutter or complexity.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { icon: <Box className="w-6 h-6"/>, title: "Asset Vault", desc: "Native support for PDFs, Word docs, images, and ZIP archives." },
-                { icon: <Lock className="w-6 h-6"/>, title: "Strict Limits", desc: "A hard 2MB file limit prevents bloat. Keep only what truly matters." },
-                { icon: <HardDrive className="w-6 h-6"/>, title: "Capacity Monitor", desc: "Real-time visual capacity monitor tracks your Vault Load against your plan." },
-                { icon: <Zap className="w-6 h-6"/>, title: "Frictionless UI", desc: "Tactile interactions and keyboard shortcuts engineered for developers." }
+                { icon: <Box className="w-6 h-6"/>, title: "Structured Notes", desc: "Create, edit, and instantly search your notes. Clean organization with fast indexing keeps your ideas accessible at all times." },
+                { icon: <HardDrive className="w-6 h-6"/>, title: "Secure File Vault", desc: "Upload and manage PDFs, images, and documents with encrypted Cloudflare R2 storage and controlled access." },
+                { icon: <Zap className="w-6 h-6"/>, title: "Real-Time Storage Tracking", desc: "Monitor your vault usage with live storage metrics and capacity insights directly from your dashboard." }
               ].map((feature, i) => (
                 <motion.div 
                   key={i}
@@ -265,17 +235,15 @@ const Landing: React.FC = () => {
           </div>
         </section>
 
-        {/* --- Stark Pricing Section --- */}
         <section id="pricing" className="relative z-10 py-32 px-6 bg-neutral-50 dark:bg-neutral-900/20 border-y-2 border-black/5 dark:border-white/5">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-20">
-              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-black dark:text-white mb-6">Scale your sanctuary.</h2>
-              <p className="text-neutral-500 dark:text-neutral-400 text-xl max-w-xl mx-auto font-light">Start with our generous base tier. Upgrade seamlessly when your intellectual property demands more space.</p>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tight text-black dark:text-white mb-6">Simple, Transparent Plans</h2>
+              <p className="text-neutral-500 dark:text-neutral-400 text-xl max-w-xl mx-auto font-light">Start free and scale as your digital workspace grows.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
-              {/* Base Plan - Outline */}
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -286,7 +254,7 @@ const Landing: React.FC = () => {
                 <div className="mb-6 flex items-baseline gap-2">
                   <span className="text-5xl font-black tracking-tight text-black dark:text-white">Free</span>
                 </div>
-                <p className="text-base text-neutral-600 dark:text-neutral-400 mb-8 pb-8 border-b-2 border-black/10 dark:border-white/10 font-medium">Perfect for developers starting to organize their essential assets.</p>
+                <p className="text-base text-neutral-600 dark:text-neutral-400 mb-8 pb-8 border-b-2 border-black/10 dark:border-white/10 font-medium">Perfect for individuals organizing essential notes and documents.</p>
                 
                 <ul className="space-y-5 mb-10 flex-grow">
                   {["1GB Vault Storage limit", "2MB maximum file size upload", "Standard Search & Indexing", "Google Authentication"].map((item, i) => (
@@ -303,7 +271,6 @@ const Landing: React.FC = () => {
                 </button>
               </motion.div>
 
-              {/* Pro Plan - Solid */}
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -316,10 +283,10 @@ const Landing: React.FC = () => {
                   <span className="text-5xl font-black tracking-tight">$8</span>
                   <span className="text-white/70 dark:text-black/70 font-bold">/month</span>
                 </div>
-                <p className="text-base text-white/80 dark:text-black/80 mb-8 pb-8 border-b-2 border-white/20 dark:border-black/10 font-medium">For power users managing extensive documentation and larger files.</p>
+                <p className="text-base text-white/80 dark:text-black/80 mb-8 pb-8 border-b-2 border-white/20 dark:border-black/10 font-medium">For professionals managing larger files and extended storage needs.</p>
                 
                 <ul className="space-y-5 mb-10 flex-grow">
-                  {["50GB Vault Storage limit", "25MB maximum file size upload", "Advanced OCR Search", "Priority email support"].map((item, i) => (
+                  {["50GB Vault Storage limit", "25MB maximum file size upload", "Advanced Search Capabilities", "Priority email support"].map((item, i) => (
                     <li key={i} className="flex items-center gap-4 text-base font-bold">
                       <div className="p-1 rounded-full bg-white/20 dark:bg-black/10"><Check className="w-4 h-4" strokeWidth={3}/></div> {item}
                     </li>
@@ -337,7 +304,6 @@ const Landing: React.FC = () => {
           </div>
         </section>
 
-        {/* --- High Contrast FAQ Section --- */}
         <section id="faq" className="relative z-10 py-32 px-6">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
@@ -346,26 +312,21 @@ const Landing: React.FC = () => {
             
             <div className="space-y-2 border-t-2 border-black/5 dark:border-white/10">
               <FAQItem 
-                question="Why is there a strict 2MB file limit on the free tier?" 
-                answer="Paperless is designed to be a frictionless repository for critical thoughts and essential documents, not a bulk storage dump. The constraint enforces intentionality and keeps the platform lightning fast. For larger assets, consider upgrading to Pro." 
+                question="Is my data secure?" 
+                answer="Yes. All files are encrypted in transit and at rest. Authentication is securely handled through Google via NextAuth." 
               />
               <FAQItem 
-                question="Is my data encrypted?" 
-                answer="Yes. All assets are encrypted both in transit and at rest. Identity verification is securely managed through NextAuth using Google Authentication, ensuring only you have access to your vault." 
+                question="What happens when I reach my storage limit?" 
+                answer="You will be notified in your dashboard. You can either delete files to free up space or upgrade your plan." 
               />
               <FAQItem 
-                question="What happens when I hit my 1GB capacity?" 
-                answer="Your real-time visual capacity monitor will alert you as you approach the limit. Once reached, you will not be able to upload new assets until you either delete old files to free up space, or upgrade your subscription tier." 
-              />
-              <FAQItem 
-                question="Can I export my data if I leave?" 
-                answer="Absolutely. We believe in zero lock-in. You can download a structured ZIP archive of all your notes and vault assets at any time with a single click from your dashboard settings." 
+                question="Can I export my data?" 
+                answer="Yes. You can download your files and notes anytime — we believe in zero lock-in." 
               />
             </div>
           </div>
         </section>
 
-        {/* --- Stark Footer --- */}
         <footer className="bg-[#ffffff] dark:bg-[#0A0A0A] border-t-2 border-black/10 dark:border-white/10 pt-20 transition-colors duration-500 relative z-10">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
@@ -378,7 +339,6 @@ const Landing: React.FC = () => {
                     Paperless
                   </span>
                 </div>
-                <p className="text-base text-neutral-500 font-medium">Thoughts, filed effortlessly. The digital sanctuary for intellectual property management.</p>
               </div>
 
               <div className="flex flex-col items-start md:items-end gap-8 w-full md:w-auto">
@@ -414,7 +374,6 @@ const Landing: React.FC = () => {
           </div>
         </footer>
 
-        {/* --- Authentication Modal (Stark Theme) --- */}
         <AnimatePresence>
           {loginModal && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">

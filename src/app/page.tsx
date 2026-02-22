@@ -110,9 +110,7 @@ const Landing: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-neutral-600 dark:text-neutral-400"
-              title="Toggle Theme (Cmd+J)"
             >
-              {/* {isDark ? <Sun size={18} /> : <Moon size={18} />} */}
               {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button 

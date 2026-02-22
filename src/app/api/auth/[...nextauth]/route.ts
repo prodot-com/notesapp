@@ -22,6 +22,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
+  pages:{
+    error: "/",
+  },
+
   session:{
     strategy:"database",
   },

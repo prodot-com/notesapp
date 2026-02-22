@@ -236,7 +236,7 @@ const Landing: React.FC = () => {
               <p className="text-neutral-500 dark:text-neutral-400 text-lg sm:text-xl max-w-xl mx-auto font-light">Start free and scale as your digital workspace grows.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
               
               <motion.div 
                 initial={{ opacity: 0, x: -20 }}
@@ -291,6 +291,51 @@ const Landing: React.FC = () => {
                   className="w-full py-4 rounded-xl bg-white dark:bg-black text-black dark:text-white font-bold hover:scale-[1.02] transition-transform text-lg"
                 >
                   Upgrade to Pro
+                </button>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="p-8 md:p-10 rounded-3xl bg-transparent border-2 border-black/20 dark:border-white/20 hover:border-black dark:hover:border-white transition-colors relative flex flex-col"
+              >
+                <h3 className="text-2xl md:text-3xl font-black text-black dark:text-white mb-2 tracking-tight">
+                  Enterprise
+                </h3>
+
+                <div className="mb-6 flex items-baseline gap-2">
+                  <span className="text-4xl md:text-5xl font-black tracking-tight text-black dark:text-white">
+                    Custom
+                  </span>
+                </div>
+
+                <p className="text-base text-neutral-600 dark:text-neutral-400 mb-8 pb-8 border-b-2 border-black/10 dark:border-white/10 font-medium">
+                  For organizations requiring unlimited storage and dedicated infrastructure.
+                </p>
+
+                <ul className="space-y-5 mb-10 flex-grow">
+                  {[
+                    "Unlimited Vault Storage",
+                    "Unlimited file size uploads",
+                    "Team Collaboration",
+                    "Dedicated Support & SLA",
+                    "Custom Integrations",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-4 text-sm md:text-base font-bold text-black dark:text-white">
+                      <div className="p-1 rounded-full bg-black/5 dark:bg-white/10 flex-shrink-0">
+                        <Check className="w-4 h-4 text-black dark:text-white" strokeWidth={3}/>
+                      </div>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <button 
+                  onClick={manageSignin}
+                  className="w-full py-4 rounded-xl border-2 border-black dark:border-white text-black dark:text-white font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-lg"
+                >
+                  Contact Sales
                 </button>
               </motion.div>
 

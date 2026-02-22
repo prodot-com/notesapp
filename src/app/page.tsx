@@ -48,40 +48,29 @@ const FAQItem: React.FC<FAQItemProps> = ({ question, answer }) => {
 const Landing: React.FC = () => {
   const [loginModal, setLoginModal] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
-  // const [isDark, setIsDark] = useState<boolean>(false);
   const { resolvedTheme, setTheme } = useTheme();
   const { data: session } = useSession();
   const router = useRouter();
 
-  // const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-useEffect(() => {
-  setMounted(true);
-}, []);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
+        e.preventDefault();
+        setTheme(resolvedTheme === "dark" ? "light" : "dark");
+      }
+    };
 
-  // useEffect(() => {
-  //   setMounted(true);
-  //   // if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  //   //   setIsDark(true);
-  //   // }
-  //   setIsDark(false)
-  // }, []);
+  window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [resolvedTheme, setTheme]);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e: KeyboardEvent) => {
-  //     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
-  //       e.preventDefault();
-  //       setIsDark(prev => !prev);
-  //     }
-  //   };
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => window.removeEventListener("keydown", handleKeyDown);
-  // }, []);
-
-  // const toggleTheme = () => setIsDark(!isDark);
   const toggleTheme = () => {
-  setTheme(resolvedTheme === "dark" ? "light" : "dark");
-};
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
     const manageSignin = () => {
     if (session) {
@@ -94,7 +83,6 @@ useEffect(() => {
   if (!mounted) return null;
 
   return (
-    // <div className={`${isDark ? 'dark' : ''} min-h-screen font-sans selection:bg-black/10 dark:selection:bg-white/20 transition-colors duration-500`}>
     <div className={`min-h-screen font-sans selection:bg-black/10 dark:selection:bg-white/20 transition-colors duration-500`}>
       <div className="min-h-screen bg-[#ffffff] dark:bg-[#0A0A0A] text-[#1A1A1A] dark:text-[#EDEDED] relative overflow-hidden transition-colors duration-500">
 
@@ -279,10 +267,10 @@ useEffect(() => {
                 </div>
                 <p className="text-base text-neutral-600 dark:text-neutral-400 mb-8 pb-8 border-b-2 border-black/10 dark:border-white/10 font-medium">Perfect for individuals organizing essential notes and documents.</p>
                 
-                <ul className="space-y-5 mb-10 flex-grow">
+                <ul className="space-y-5 mb-10 grow">
                   {["1GB Vault Storage limit", "2MB maximum file size upload", "Standard Search & Indexing", "Google Authentication"].map((item, i) => (
                     <li key={i} className="flex items-center gap-4 text-sm md:text-base font-bold text-black dark:text-white">
-                      <div className="p-1 rounded-full bg-black/5 dark:bg-white/10 flex-shrink-0"><Check className="w-4 h-4 text-black dark:text-white" strokeWidth={3}/></div> {item}
+                      <div className="p-1 rounded-full bg-black/5 dark:bg-white/10 shrink-0"><Check className="w-4 h-4 text-black dark:text-white" strokeWidth={3}/></div> {item}
                     </li>
                   ))}
                 </ul>
@@ -308,10 +296,10 @@ useEffect(() => {
                 </div>
                 <p className="text-base text-white/80 dark:text-black/80 mb-8 pb-8 border-b-2 border-white/20 dark:border-black/10 font-medium">For professionals managing larger files and extended storage needs.</p>
                 
-                <ul className="space-y-5 mb-10 flex-grow">
+                <ul className="space-y-5 mb-10 grow">
                   {["50GB Vault Storage limit", "25MB maximum file size upload", "Advanced Search Capabilities", "Priority email support"].map((item, i) => (
                     <li key={i} className="flex items-center gap-4 text-sm md:text-base font-bold">
-                      <div className="p-1 rounded-full bg-white/20 dark:bg-black/10 flex-shrink-0"><Check className="w-4 h-4" strokeWidth={3}/></div> {item}
+                      <div className="p-1 rounded-full bg-white/20 dark:bg-black/10 shrink-0"><Check className="w-4 h-4" strokeWidth={3}/></div> {item}
                     </li>
                   ))}
                 </ul>
@@ -343,7 +331,7 @@ useEffect(() => {
                   For organizations requiring unlimited storage and dedicated infrastructure.
                 </p>
 
-                <ul className="space-y-5 mb-10 flex-grow">
+                <ul className="space-y-5 mb-10 grow">
                   {[
                     "Unlimited Vault Storage",
                     "Unlimited file size uploads",
@@ -352,7 +340,7 @@ useEffect(() => {
                     "Custom Integrations",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-4 text-sm md:text-base font-bold text-black dark:text-white">
-                      <div className="p-1 rounded-full bg-black/5 dark:bg-white/10 flex-shrink-0">
+                      <div className="p-1 rounded-full bg-black/5 dark:bg-white/10 shrink-0">
                         <Check className="w-4 h-4 text-black dark:text-white" strokeWidth={3}/>
                       </div>
                       {item}
@@ -445,7 +433,7 @@ useEffect(() => {
 
         <AnimatePresence>
           {loginModal && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+            <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
               <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={() => setLoginModal(false)}

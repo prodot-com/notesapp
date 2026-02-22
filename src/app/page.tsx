@@ -154,7 +154,7 @@ const Landing: React.FC = () => {
             initial={{ opacity: 0, x: 20, y: -10 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 3, delay: 0.5 }}
-            className="hidde lg:block absolute right-0 bottom-50 w-48 h-48 text-black dark:text-white opacity-80 pointer-events-none"
+            className="hidden lg:block absolute right-0 bottom-50 w-48 h-48 text-black dark:text-white opacity-80 pointer-events-none"
           >
             <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M40 100 L100 80 L160 100 L100 120 Z" />

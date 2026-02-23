@@ -9,10 +9,6 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
-interface LogoProps {
-  className?: string;
-}
-
 interface FAQItemProps {
   question: string;
   answer: string;

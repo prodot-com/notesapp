@@ -414,17 +414,17 @@
 
             <div className="flex items-center gap-2">
                 {Object.keys(linkPreviews).length > 0 && (
-                <button
-                    onClick={() => setOpenPreviews(!openPreviews)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
-                    openPreviews
-                        ? "bg-black text-white dark:bg-white dark:text-black"
-                        : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-900"
-                    }`}
-                >
-                    {openPreviews ? <EyeOff size={14} /> : <Eye size={14} />}
-                    {openPreviews ? "Editor" : "Gallery"}
-                </button>
+                    <button
+                        onClick={() => setOpenPreviews(!openPreviews)}
+                        className={`cursor-pointer flex items-center gap-1 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
+                        openPreviews
+                            ? "bg-black text-white dark:bg-white dark:text-black"
+                            : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-neutral-900"
+                        }`}
+                    >
+                        {openPreviews ? <EyeOff size={14} /> : <Eye size={14} />}
+                        {openPreviews ? "Editor" : "Preview"}
+                    </button>
                 )}
 
                     <button
@@ -476,20 +476,20 @@
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex flex-col bg-white dark:bg-[#111] rounded-[24px] overflow-hidden border border-neutral-100 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-2xl transition-all duration-500"
+                            className="group flex flex-col bg-white dark:bg-[#111] rounded-lg overflow-hidden border border-neutral-100 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-2xl transition-all duration-500"
                             >
-                            <div className="aspect-[16/10] overflow-hidden relative">
+                            <div className="aspect-16/10 overflow-hidden relative">
                                 <img
                                 src={preview.image}
                                 alt={preview.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                                 <div className="absolute top-4 left-4">
                                 <div className="bg-black/50 backdrop-blur-md text-white text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest border border-white/10">
-                                    {preview.domain}
+                                    {url}
                                 </div>
                                 </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
 
                             <div className="p-7 flex flex-col flex-1">
@@ -506,11 +506,6 @@
                                 <p className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-3 leading-relaxed mb-6 flex-1">
                                 {preview.description}
                                 </p>
-
-                                <div className="flex items-center gap-2 text-[10px] text-neutral-400 font-medium tracking-tighter truncate">
-                                <LinkIcon size={10} />
-                                {url}
-                                </div>
                             </div>
                             </motion.a>
                         )

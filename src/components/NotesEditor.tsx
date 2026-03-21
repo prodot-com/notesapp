@@ -41,7 +41,7 @@ export default function NotesEditor({
     const [searchQuery, setSearchQuery] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [linkPreview, setLinkPreview] = useState<any>(null)
+    const [linkPreviews, setLinkPreviews] = useState<Record<string, any>>({})
     const previewCache = useRef<Record<string, any>>({})
 
     const previousId = useRef<string | null>(null);
@@ -92,33 +92,38 @@ export default function NotesEditor({
         });
     }, [notes, searchQuery]);
 
-    const extractUrl = (text: string) => {
-        const match = text.match(/https?:\/\/[^\s]+/)
-        return match ? match[0] : null
+    const extractUrls = (text: string) => {
+    return text.match(/https?:\/\/[^\s]+/g) || []
     }
 
     const fetchPreview = async (url: string) => {
-        if (previewCache.current[url]) {
-            setLinkPreview(previewCache.current[url])
-            return
-        }
+    if (previewCache.current[url]) {
+        setLinkPreviews((prev) => ({
+        ...prev,
+        [url]: previewCache.current[url],
+        }))
+        return
+    }
 
-        try {
-            const res = await fetch("/api/link-preview", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ url }),
-            })
+    try {
+        const res = await fetch("/api/link-preview", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+        })
 
-            const data = await res.json()
+        const data = await res.json()
 
-            previewCache.current[url] = data
-            setLinkPreview(data)
-        } catch {
-            setLinkPreview(null)
-        }
+        previewCache.current[url] = data
+
+        setLinkPreviews((prev) => ({
+        ...prev,
+        [url]: data,
+        }))
+    } catch {
+    }
     }
 
     function updateField(field: "title" | "content", value: string) {
@@ -130,18 +135,20 @@ export default function NotesEditor({
         );
     }
 
+    // useEffect(()=>console.log(linkPreviews))
+
     useEffect(() => {
     if (!activeNote) return
 
-    const url = extractUrl(activeNote.content)
+    const urls = extractUrls(activeNote.content)
 
-    if (!url) {
-        setLinkPreview(null)
+    if (urls.length === 0) {
+        setLinkPreviews({})
         return
     }
 
     const timer = setTimeout(() => {
-        fetchPreview(url)
+        urls.forEach((url) => fetchPreview(url))
     }, 500)
 
     return () => clearTimeout(timer)
@@ -407,34 +414,35 @@ export default function NotesEditor({
                                     placeholder="Pour your thoughts..."
                                 />
 
-                                {linkPreview && (
-                                    <a
-                                        href={linkPreview.url}
-                                        target="_blank"
-                                        className="mt-6 block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition"
-                                    >
-                                        {linkPreview.image && (
-                                        <img
-                                            src={linkPreview.image}
-                                            className="w-full h-48 object-cover"
-                                        />
-                                        )}
+                                {Object.entries(linkPreviews).map(([url, preview]) => (
+                                <a
+                                    key={url}
+                                    href={url}
+                                    target="_blank"
+                                    className="mt-6 block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition"
+                                >
+                                    {preview?.image && (
+                                    <img
+                                        src={preview.image}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                    )}
 
-                                        <div className="p-4">
-                                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-                                            {linkPreview.title}
-                                        </h3>
+                                    <div className="p-4">
+                                    <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
+                                        {preview?.title}
+                                    </h3>
 
-                                        <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
-                                            {linkPreview.description}
-                                        </p>
+                                    <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
+                                        {preview?.description}
+                                    </p>
 
-                                        <p className="text-[10px] mt-2 text-neutral-400">
-                                            {linkPreview.url}
-                                        </p>
-                                        </div>
-                                    </a>
-                                )}
+                                    <p className="text-[10px] mt-2 text-neutral-400">
+                                        {url}
+                                    </p>
+                                    </div>
+                                </a>
+                                ))}
                                 
                             </motion.div>
                         ) : (

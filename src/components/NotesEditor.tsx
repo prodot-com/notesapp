@@ -14,10 +14,12 @@ import {
     MoreVertical,
     Menu,
     RefreshCw,
-    RefreshCcw, 
+    RefreshCcw,
+    ArrowRight, 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CustomModal from "./CustomModal";
+import TiptapEditor from "./TiptapEditor";
 
 type Note = {
     id: string;
@@ -84,7 +86,10 @@ export default function NotesEditor({
     const filteredNotes = useMemo(() => {
         const searchStr = searchQuery.toLowerCase();
         return notes.filter((note) => {
-            const safeContent = note.content.slice(0, 500);
+            const stripHTML = (html: string) =>
+            html.replace(/<[^>]+>/g, "")
+
+            const safeContent = stripHTML(note.content).slice(0, 500)
             return (
                 note.title.toLowerCase().includes(searchStr) ||
                 safeContent.toLowerCase().includes(searchStr)
@@ -204,6 +209,10 @@ export default function NotesEditor({
     }
 }
 
+const stripHTML = (html: string) => {
+  return html.replace(/<[^>]*>/g, "")
+}
+
 
     async function createNote() {
         try {
@@ -309,7 +318,7 @@ export default function NotesEditor({
                                             {note.title || "Untitled sheet"}
                                         </h3>
                                         <p className="text-[11px] text-neutral-400 leading-relaxed truncate font-light">
-                                            {note.content ? note.content.slice(0, 45) : "No thoughts yet..."}
+                                            {note.content ? stripHTML(note.content).slice(0, 45) : "No thoughts yet..."}
                                         </p>
                                     </div>
                                     <button
@@ -400,40 +409,63 @@ export default function NotesEditor({
                                     placeholder="The Title..."
                                 />
 
-                                <textarea
+                                {/* <textarea
                                     value={activeNote.content}
                                     onChange={(e) => updateField("content", e.target.value)}
                                     className="flex-1 w-full resize-none outline-none bg-transparent text-base md:text-xl leading-[1.8] font-light text-neutral-600 dark:text-neutral-400 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 pb-20"
                                     placeholder="Pour your thoughts..."
-                                />
-                                {linkPreview && (
+                                /> */}
+
+                                <TiptapEditor
+  content={activeNote.content}
+  onChange={(val) => updateField("content", val)}
+/>
+
+                                {/* {linkPreview && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    className="mt-12 mb-20 group relative"
+                                >
+                                    <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/5 to-orange-500/5 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
                                     <a
-                                        href={linkPreview.url}
-                                        target="_blank"
-                                        className="mt-6 block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition"
+                                    href={linkPreview.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="relative flex flex-col md:flex-row items-stretch border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden bg-white/50 dark:bg-neutral-900/50 backdrop-blur-md hover:border-blue-400/50 dark:hover:border-blue-500/50 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] transition-all duration-500"
                                     >
-                                        {linkPreview.image && (
+                                    {linkPreview.image && (
+                                        <div className="md:w-48 h-32 md:h-auto overflow-hidden border-b md:border-b-0 md:border-r border-neutral-100 dark:border-neutral-800">
                                         <img
                                             src={linkPreview.image}
-                                            className="w-full h-48 object-cover"
+                                            alt={linkPreview.title}
+                                            className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                                         />
-                                        )}
+                                        </div>
+                                    )}
 
-                                        <div className="p-4">
-                                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-                                            {linkPreview.title}
+                                    <div className="flex-1 p-5 md:p-6 flex flex-col justify-center">
+
+                                        <h3 className="text-sm md:text-base font-medium text-neutral-900 dark:text-white line-clamp-1 mb-1 tracking-tight">
+                                        {linkPreview.title || "Untitled Link"}
                                         </h3>
 
-                                        <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
-                                            {linkPreview.description}
+                                        <p className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed font-light">
+                                        {linkPreview.description || "No description available for this digital asset."}
                                         </p>
 
-                                        <p className="text-[10px] mt-2 text-neutral-400">
-                                            {linkPreview.url}
-                                        </p>
+                                        <div className="mt-4 flex items-center gap-2">
+                                        <span className="text-[10px] font-mono text-blue-500/70 truncate max-w-[200px]">
+                                            {new URL(linkPreview.url).hostname}
+                                        </span>
+                                        <ArrowRight size={10} className="text-neutral-300 group-hover:translate-x-1 transition-transform" />
                                         </div>
+                                    </div>
                                     </a>
-                                )}
+                                </motion.div>
+                                )} */}
+
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center gap-6 text-neutral-300 dark:text-neutral-800 transition-opacity p-6">

@@ -41,7 +41,8 @@ export default function NotesEditor({
     const [searchQuery, setSearchQuery] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    
+    const [linkPreview, setLinkPreview] = useState<any>(null)
+    const previewCache = useRef<Record<string, any>>({})
 
     const previousId = useRef<string | null>(null);
     const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -91,6 +92,35 @@ export default function NotesEditor({
         });
     }, [notes, searchQuery]);
 
+    const extractUrl = (text: string) => {
+        const match = text.match(/https?:\/\/[^\s]+/)
+        return match ? match[0] : null
+    }
+
+    const fetchPreview = async (url: string) => {
+        if (previewCache.current[url]) {
+            setLinkPreview(previewCache.current[url])
+            return
+        }
+
+        try {
+            const res = await fetch("/api/link-preview", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url }),
+            })
+
+            const data = await res.json()
+
+            previewCache.current[url] = data
+            setLinkPreview(data)
+        } catch {
+            setLinkPreview(null)
+        }
+    }
+
     function updateField(field: "title" | "content", value: string) {
         if (!activeNote) return;
         setNotes((prev) =>
@@ -99,6 +129,23 @@ export default function NotesEditor({
             )
         );
     }
+
+    useEffect(() => {
+    if (!activeNote) return
+
+    const url = extractUrl(activeNote.content)
+
+    if (!url) {
+        setLinkPreview(null)
+        return
+    }
+
+    const timer = setTimeout(() => {
+        fetchPreview(url)
+    }, 500)
+
+    return () => clearTimeout(timer)
+    }, [activeNote?.content])
 
     useEffect(() => {
         if (!activeNote) return;
@@ -359,6 +406,34 @@ export default function NotesEditor({
                                     className="flex-1 w-full resize-none outline-none bg-transparent text-base md:text-xl leading-[1.8] font-light text-neutral-600 dark:text-neutral-400 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 pb-20"
                                     placeholder="Pour your thoughts..."
                                 />
+                                {linkPreview && (
+                                    <a
+                                        href={linkPreview.url}
+                                        target="_blank"
+                                        className="mt-6 block border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden hover:shadow-lg transition"
+                                    >
+                                        {linkPreview.image && (
+                                        <img
+                                            src={linkPreview.image}
+                                            className="w-full h-48 object-cover"
+                                        />
+                                        )}
+
+                                        <div className="p-4">
+                                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
+                                            {linkPreview.title}
+                                        </h3>
+
+                                        <p className="text-xs text-neutral-500 mt-1 line-clamp-2">
+                                            {linkPreview.description}
+                                        </p>
+
+                                        <p className="text-[10px] mt-2 text-neutral-400">
+                                            {linkPreview.url}
+                                        </p>
+                                        </div>
+                                    </a>
+                                )}
                             </motion.div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center gap-6 text-neutral-300 dark:text-neutral-800 transition-opacity p-6">

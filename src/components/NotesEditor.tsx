@@ -96,9 +96,14 @@
         });
     }, [notes, searchQuery]);
 
+    const cleanUrl = (url: string) => {
+    return url.replace(/[),.]+$/, "")
+    }
+
     const extractUrls = (text: string) => {
-        return text.match(/https?:\/\/[^\s]+/g) || [];
-    };
+    const matches = text.match(/https?:\/\/[^\s]+/g) || []
+    return [...new Set(matches.map(cleanUrl))]
+    }
 
     const fetchPreview = async (url: string) => {
         if (linkPreviews[url]) return;
@@ -476,7 +481,7 @@
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex flex-col bg-white dark:bg-[#111] rounded-lg overflow-hidden border border-neutral-100 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-2xl transition-all duration-500"
+                            className="group flex flex-col bg-white dark:bg-[#111] rounded-lg overflow-hidden border border-neutral-300 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-2xl transition-all duration-500"
                             >
                             <div className="aspect-16/10 overflow-hidden relative">
                                 <img

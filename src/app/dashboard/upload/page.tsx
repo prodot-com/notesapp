@@ -3,18 +3,18 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Upload, 
-  File, 
-  MoreVertical, 
-  Eye, 
-  Download, 
-  Trash2, 
-  Share2, 
-  Type, 
+import {
+  Upload,
+  File,
+  MoreVertical,
+  Eye,
+  Download,
+  Trash2,
+  Share2,
+  Type,
   Search,
   HardDrive,
-  Loader2
+  Loader2,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -50,18 +50,17 @@ export default function UploadPage() {
     message: "",
   });
 
-
   function validateFile(file: File): string | null {
-  if (!allowedTypes.includes(file.type)) {
-    return "Unsupported file type.";
-  }
+    if (!allowedTypes.includes(file.type)) {
+      return "Unsupported file type.";
+    }
 
-  if (file.size > MAX_SIZE) {
-    return "File exceeds size limit.";
-  }
+    if (file.size > MAX_SIZE) {
+      return "File exceeds size limit.";
+    }
 
-  return null;
-}
+    return null;
+  }
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -80,7 +79,6 @@ export default function UploadPage() {
         });
     }
   }, [status]);
-
 
   async function handleFiles(selectedFiles: File[]) {
     if (!selectedFiles.length) return;
@@ -113,12 +111,10 @@ export default function UploadPage() {
         }
       }
 
-      // Refresh file list after upload batch
       const refreshed = await fetch("/api/upload");
       if (refreshed.ok) {
         setFiles(await refreshed.json());
       }
-
     } catch {
       toast.error("Upload failed");
     } finally {
@@ -126,76 +122,82 @@ export default function UploadPage() {
     }
   }
 
+  async function uploadFile(selectedFile?: File) {
+    const fileToUpload = selectedFile || file;
+    if (!fileToUpload) return;
 
-async function uploadFile(selectedFile?: File) {
-  const fileToUpload = selectedFile || file;
-  if (!fileToUpload) return;
+    const validationError = validateFile(fileToUpload);
 
-  const validationError = validateFile(fileToUpload);
-
-  if (validationError) {
-    setModal({
-      isOpen: true,
-      type: "error",
-      title: "Upload Blocked",
-      message: validationError,
-    });
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const formData = new FormData();
-    formData.append("file", fileToUpload);
-
-    const uploadRes = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await uploadRes.json();
-
-    if (!uploadRes.ok) {
-      throw new Error(data.error || "Upload failed");
+    if (validationError) {
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "Upload Blocked",
+        message: validationError,
+      });
+      return;
     }
 
-    toast.success("File uploaded successfully");
+    try {
+      setLoading(true);
 
-    const res = await fetch("/api/upload");
-    if (!res.ok) throw new Error("Failed to refresh file list");
+      const formData = new FormData();
+      formData.append("file", fileToUpload);
 
-    setFiles(await res.json());
-  } catch (err: any) {
-    setModal({
-      isOpen: true,
-      type: "error",
-      title: "Upload Failed",
-      message: err.message || "Something went wrong",
-    });
-  } finally {
-    setLoading(false);
-    setFile(null);
+      const uploadRes = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await uploadRes.json();
+
+      if (!uploadRes.ok) {
+        throw new Error(data.error || "Upload failed");
+      }
+
+      toast.success("File uploaded successfully");
+
+      const res = await fetch("/api/upload");
+      if (!res.ok) throw new Error("Failed to refresh file list");
+
+      setFiles(await res.json());
+    } catch (err: any) {
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "Upload Failed",
+        message: err.message || "Something went wrong",
+      });
+    } finally {
+      setLoading(false);
+      setFile(null);
+    }
   }
-}
 
-
-
-  if (status === "loading") return <div className="p-12 animate-pulse text-neutral-400">Syncing vault...</div>;
+  if (status === "loading")
+    return (
+      <div className="p-12 animate-pulse text-neutral-400">
+        Syncing vault...
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-[#0a0a0a] transition-colors p-4 md:p-12">
       <div className="max-w-5xl mx-auto">
-        
         <header className="mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
             <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em] mb-2">
               <HardDrive size={14} />
               <span>Digital Asset Manager</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-light tracking-tight italic font-serif text-neutral-900 dark:text-white">File Vault</h1>
+            <h1 className="text-3xl md:text-4xl font-light tracking-tight italic font-serif text-neutral-900 dark:text-white">
+              File Vault
+            </h1>
             <p className="text-neutral-500 dark:text-neutral-400 mt-2 text-sm">
-              Logged in as <span className="font-medium text-neutral-800 dark:text-neutral-200 block sm:inline">{session?.user?.email}</span>
+              Logged in as{" "}
+              <span className="font-medium text-neutral-800 dark:text-neutral-200 block sm:inline">
+                {session?.user?.email}
+              </span>
             </p>
           </div>
         </header>
@@ -217,16 +219,22 @@ async function uploadFile(selectedFile?: File) {
                           overflow-hidden"
               >
                 <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute -top-40 left-1/2 -translate-x-1/2 
+                  <div
+                    className="absolute -top-40 left-1/2 -translate-x-1/2 
                                   w-150 h-150 
                                   bg-blue-500/10 dark:bg-blue-500/5 
-                                  blur-[120px] rounded-full" />
+                                  blur-[120px] rounded-full"
+                  />
                 </div>
 
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   <motion.div
                     animate={{ x: ["-120%", "120%"] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                     className="absolute top-0 h-px w-[50%] 
                               bg-linear-to-r from-transparent via-blue-500/70 to-transparent 
                               blur-sm opacity-60"
@@ -234,18 +242,23 @@ async function uploadFile(selectedFile?: File) {
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
-
                   <motion.div
                     animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                     className="relative mb-10"
                   >
                     <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full opacity-60" />
-                    
-                    <div className="relative p-6 rounded-2xl 
+
+                    <div
+                      className="relative p-6 rounded-2xl 
                                     bg-white dark:bg-neutral-900 
                                     border border-neutral-200 dark:border-neutral-800 
-                                    shadow-sm text-blue-500">
+                                    shadow-sm text-blue-500"
+                    >
                       <Upload size={30} />
                     </div>
                   </motion.div>
@@ -260,8 +273,10 @@ async function uploadFile(selectedFile?: File) {
                       Uploading Securely
                     </motion.h3>
 
-                    <p className="text-[11px] uppercase tracking-[0.25em] 
-                                  font-semibold text-blue-500/70">
+                    <p
+                      className="text-[11px] uppercase tracking-[0.25em] 
+                                  font-semibold text-blue-500/70"
+                    >
                       Encrypting & Syncing
                     </p>
                   </div>
@@ -282,7 +297,6 @@ async function uploadFile(selectedFile?: File) {
                   </p>
                 </div>
               </motion.div>
-
             ) : (
               <motion.div
                 key="idle"
@@ -297,7 +311,7 @@ async function uploadFile(selectedFile?: File) {
                   e.preventDefault();
                   setIsDragging(false);
                   const droppedFiles = Array.from(e.dataTransfer.files);
-                  if (droppedFiles.length > 0){
+                  if (droppedFiles.length > 0) {
                     handleFiles(droppedFiles);
                   }
                 }}
@@ -308,7 +322,9 @@ async function uploadFile(selectedFile?: File) {
                 }`}
               >
                 <motion.div
-                  animate={isDragging ? { scale: 1.2, rotate: 5 } : { scale: 1 }}
+                  animate={
+                    isDragging ? { scale: 1.2, rotate: 5 } : { scale: 1 }
+                  }
                   className={`p-5 rounded-[1.8rem] mb-5 transition-colors shadow-sm ${
                     isDragging
                       ? "bg-blue-500 text-white"
@@ -333,14 +349,14 @@ async function uploadFile(selectedFile?: File) {
                     className="hidden"
                     accept=".pdf,.doc,.docx,.pptx,.txt,.jpg,.jpeg,.png,.webp,.gif,.zip"
                     onChange={(e) => {
-                      if(!e.target.files) return;
+                      if (!e.target.files) return;
                       const selectedFiles = Array.from(e.target.files);
 
-                      if(selectedFiles.length > 0){
+                      if (selectedFiles.length > 0) {
                         handleFiles(selectedFiles);
                       }
 
-                      e.target.value ="";
+                      e.target.value = "";
                     }}
                   />
                 </label>
@@ -351,14 +367,22 @@ async function uploadFile(selectedFile?: File) {
 
         <div className="mt-12 md:mt-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-[10px] md:text-sm font-bold uppercase tracking-widest text-neutral-400 shrink-0">Stored Assets ({files.length})</h2>
+            <h2 className="text-[10px] md:text-sm font-bold uppercase tracking-widest text-neutral-400 shrink-0">
+              Stored Assets ({files.length})
+            </h2>
             <div className="h-1px flex-1 bg-neutral-100 dark:bg-neutral-900 mx-4 md:mx-6" />
           </div>
 
           <div className="space-y-4 md:space-y-3">
             <AnimatePresence>
               {files.length === 0 && (
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 text-neutral-300 italic">The vault is currently empty.</motion.p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 text-neutral-300 italic"
+                >
+                  The vault is currently empty.
+                </motion.p>
               )}
               {files.map((f) => (
                 <motion.div
@@ -374,24 +398,43 @@ async function uploadFile(selectedFile?: File) {
                       <HardDrive size={20} />
                     </div>
                     <div className="overflow-hidden">
-                      <p className="text-sm font-medium truncate pr-2">{f.name}</p>
+                      <p className="text-sm font-medium truncate pr-2">
+                        {f.name}
+                      </p>
                       <p className="text-[10px] text-neutral-400 uppercase tracking-tighter font-bold">
-                        {Math.round(f.size / 1024)} KB • {new Date(f.createdAt).toLocaleDateString()}
+                        {Math.round(f.size / 1024)} KB •{" "}
+                        {new Date(f.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between sm:justify-end gap-1 border-t sm:border-t-0 pt-3 sm:pt-0 border-neutral-50 dark:border-neutral-900">
                     <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-                        <FileActionBtn icon={<Eye size={16} />} onClick={() => handleAction(f.id, 'view')} label="View" />
-                        <FileActionBtn icon={<Type size={16} />} onClick={() => handleRename(f)} label="Rename" />
-                        <FileActionBtn icon={<Download size={16} />} onClick={() => handleAction(f.id, 'download')} label="Save" />
-                        <FileActionBtn icon={<Share2 size={16} />} onClick={() => handleShare(f.id)} label="Share" />
+                      <FileActionBtn
+                        icon={<Eye size={16} />}
+                        onClick={() => handleAction(f.id, "view")}
+                        label="View"
+                      />
+                      <FileActionBtn
+                        icon={<Type size={16} />}
+                        onClick={() => handleRename(f)}
+                        label="Rename"
+                      />
+                      <FileActionBtn
+                        icon={<Download size={16} />}
+                        onClick={() => handleAction(f.id, "download")}
+                        label="Save"
+                      />
+                      <FileActionBtn
+                        icon={<Share2 size={16} />}
+                        onClick={() => handleShare(f.id)}
+                        label="Share"
+                      />
                     </div>
-                    
+
                     <div className="w-px h-4 bg-neutral-100 dark:bg-neutral-800 mx-1 md:mx-2 shrink-0" />
-                    
-                    <button 
+
+                    <button
                       onClick={() => handleDelete(f)}
                       className="p-2 cursor-pointer text-neutral-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-lg transition-all shrink-0"
                     >
@@ -404,16 +447,14 @@ async function uploadFile(selectedFile?: File) {
           </div>
         </div>
         <CustomModal
-        isOpen={modal.isOpen}
-        onClose={() =>
-          setModal((prev) => ({ ...prev, isOpen: false }))
-        }
-        type={modal.type}
-        title={modal.title}
-        message={modal.message}
-        defaultValue={modal.file?.name}
-        onConfirm={handleModalConfirm}
-      />
+          isOpen={modal.isOpen}
+          onClose={() => setModal((prev) => ({ ...prev, isOpen: false }))}
+          type={modal.type}
+          title={modal.title}
+          message={modal.message}
+          defaultValue={modal.file?.name}
+          onConfirm={handleModalConfirm}
+        />
       </div>
     </div>
   );
@@ -424,7 +465,8 @@ async function uploadFile(selectedFile?: File) {
       if (!res.ok) throw new Error("Action failed");
 
       const { url } = await res.json();
-      window.open(url, "_blank", "noopener,noreferrer");
+      window.open(`/file/${id}`, "_blank");
+      // window.open(url, "_blank", "noopener,noreferrer");
     } catch {
       toast.error("Unable to perform action");
     }
@@ -445,7 +487,11 @@ async function uploadFile(selectedFile?: File) {
       const res = await fetch("/api/share/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "file", resourceId: id, expiresInHours: 24 }),
+        body: JSON.stringify({
+          type: "file",
+          resourceId: id,
+          expiresInHours: 24,
+        }),
       });
 
       if (!res.ok) throw new Error("Share failed");
@@ -503,9 +549,7 @@ async function uploadFile(selectedFile?: File) {
 
         if (!res.ok) throw new Error();
 
-        setFiles((prev) =>
-          prev.filter((x) => x.id !== modal.file?.id)
-        );
+        setFiles((prev) => prev.filter((x) => x.id !== modal.file?.id));
 
         toast.success("File deleted successfully");
       }
@@ -517,14 +561,24 @@ async function uploadFile(selectedFile?: File) {
   }
 }
 
-function FileActionBtn({ icon, onClick, label }: { icon: any, onClick: () => void, label: string }) {
+function FileActionBtn({
+  icon,
+  onClick,
+  label,
+}: {
+  icon: any;
+  onClick: () => void;
+  label: string;
+}) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="flex cursor-pointer items-center gap-2 p-2 px-2 md:px-3 text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-lg transition-all"
     >
       {icon}
-      <span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">{label}</span>
+      <span className="text-[10px] font-bold uppercase tracking-wider hidden lg:block">
+        {label}
+      </span>
     </button>
   );
 }

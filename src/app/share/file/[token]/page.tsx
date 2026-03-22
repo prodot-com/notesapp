@@ -4,11 +4,15 @@ import { notFound, redirect } from "next/navigation";
 export default async function SharedFile({
   params,
 }: {
-  params: Promise<{ token: string }>;
+  params: Promise<{ token: string }>; // ✅ Promise
 }) {
-  const { token } = await params;
+  const { token } = await params; // ✅ MUST await
 
-  const share = await prisma.shareToken.findUnique({ where: { token } });
+  console.log("TOKEN:", token);
+
+  const share = await prisma.shareToken.findUnique({
+    where: { token },
+  });
 
   if (
     !share ||
@@ -24,5 +28,5 @@ export default async function SharedFile({
 
   if (!file) notFound();
 
-  redirect(file.path);
+  redirect(`/file/${file.id}`);
 }

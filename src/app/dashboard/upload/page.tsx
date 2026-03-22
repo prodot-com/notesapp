@@ -490,7 +490,7 @@ export default function UploadPage() {
         body: JSON.stringify({
           type: "file",
           resourceId: id,
-          expiresInHours: 24,
+          expiresInHours: 0.001,
         }),
       });
 

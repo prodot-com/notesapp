@@ -484,7 +484,7 @@ export default function UploadPage() {
 
   async function handleShare(id: string) {
     try {
-      const res = await fetch("/api/share/create", {
+      const res = await fetch("/api/upload/share", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

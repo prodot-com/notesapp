@@ -467,7 +467,7 @@ export default function UploadPage() {
       const { url } = await res.json();
 
       if (action === "view") {
-        window.open(`/file/${id}`, "_blank");
+        router.push(`/file/${id}`);
       }
 
       if (action === "download") {

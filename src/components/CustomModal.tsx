@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  type: "error" | "confirm" | "rename" | "delete";
+  type: "error" | "confirm" | "rename" | "delete" | "share";
   title: string;
   message: string;
   defaultValue?: string;
@@ -16,6 +16,7 @@ type ModalProps = {
 
 export default function CustomModal({ isOpen, onClose, type, title, message, defaultValue, onConfirm }: ModalProps) {
   const [inputValue, setInputValue] = useState(defaultValue || "");
+  const [selected, setSelected] = useState("1");
 
   useEffect(() => {
     if (isOpen) setInputValue(defaultValue || "");
@@ -64,6 +65,21 @@ export default function CustomModal({ isOpen, onClose, type, title, message, def
                 </div>
               )}
 
+              {type === "share" && (
+  <div className="space-y-3 mt-4">
+    <select
+      className="w-full p-2 border rounded-lg"
+      defaultValue="1"
+      onChange={(e) => setSelected(e.target.value)}
+    >
+      <option value="1">1 Hour</option>
+      <option value="6">6 Hours</option>
+      <option value="24">24 Hours</option>
+      <option value="never">Never Expire</option>
+    </select>
+  </div>
+)}
+
               <div className="flex gap-3 w-full">
                 {(type === 'confirm' || type === 'rename') && (
                   <button onClick={onClose} className="flex-1 px-4 py-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 font-medium text-sm hover:opacity-80 transition-all cursor-pointer">
@@ -72,7 +88,13 @@ export default function CustomModal({ isOpen, onClose, type, title, message, def
                 )}
                 <button 
                   onClick={() => { 
-                    if(onConfirm) onConfirm(type === 'rename' ? inputValue : undefined); 
+                    if(onConfirm) onConfirm(
+  type === "rename"
+    ? inputValue
+    : type === "share"
+    ? selected
+    : undefined
+);
                     onClose(); 
                   }}
                   className={`flex-1 px-4 py-3 rounded-xl font-medium text-sm transition-all shadow-sm cursor-pointer 

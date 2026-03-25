@@ -18,7 +18,6 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ){
-  console.log("started 2")
   const session = await getServerSession(authOptions);
 
   const {id} = await params;
@@ -39,14 +38,11 @@ export async function GET(
     isAllowed = true;
   }
 
-  console.log(isAllowed)
-
   if (!isAllowed && token) {
     const share = await prisma.shareToken.findUnique({
       where: { token },
     });
 
-    console.log(share)
     if (
       share &&
       share.resourceId === file.id &&

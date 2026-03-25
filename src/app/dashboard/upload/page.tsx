@@ -39,7 +39,7 @@ export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [modal, setModal] = useState<{
     isOpen: boolean;
-    type: "error" | "confirm" | "rename";
+    type: "error" | "confirm" | "rename" | "share";
     title: string;
     message: string;
     file?: FileItem;
@@ -482,28 +482,40 @@ export default function UploadPage() {
     });
   }
 
-  async function handleShare(id: string) {
-    try {
-      const res = await fetch("/api/upload/share", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "file",
-          resourceId: id,
-          expiresInHours: 1,
-        }),
-      });
+  // async function handleShare(id: string) {
+  //   try {
+  //     const res = await fetch("/api/upload/share", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         type: "file",
+  //         resourceId: id,
+  //         expiresInHours: 1,
+  //       }),
+  //     });
 
-      if (!res.ok) throw new Error("Share failed");
+  //     if (!res.ok) throw new Error("Share failed");
 
-      const { url } = await res.json();
-      await navigator.clipboard.writeText(url);
+  //     const { url } = await res.json();
+  //     await navigator.clipboard.writeText(url);
 
-      toast.success("Share link copied to clipboard");
-    } catch {
-      toast.error("Unable to create share link");
-    }
-  }
+  //     toast.success("Share link copied to clipboard");
+  //   } catch {
+  //     toast.error("Unable to create share link");
+  //   }
+  // }
+
+  function handleShare(id: string) {
+  const file = files.find((f) => f.id === id);
+
+  setModal({
+    isOpen: true,
+    type: "share",
+    title: "Share File",
+    message: "Select expiry duration",
+    file,
+  });
+}
 
   function handleDelete(f: FileItem) {
     setModal({
@@ -519,6 +531,27 @@ export default function UploadPage() {
     if (!modal.file) return;
 
     try {
+          if (modal.type === "share") {
+      const expiresInHours =
+        value === "never" ? null : Number(value);
+
+      const res = await fetch("/api/upload/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "file",
+          resourceId: modal.file.id,
+          expiresInHours,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Share failed");
+
+      const { url } = await res.json();
+      await navigator.clipboard.writeText(url);
+
+      toast.success("Share link copied!");
+    }
       if (modal.type === "rename") {
         if (!value || value.trim() === modal.file.name) {
           toast.error("Invalid file name");

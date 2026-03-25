@@ -121,7 +121,7 @@ export default function Workspace({
                 <img
                   src={session.image}
                   alt="Avatar"
-                  className="relative w-16 h-16 rounded-[22px] border-2 border-white dark:border-neutral-800 object-cover shadow-xl transition-transform duration-300 group-hover:scale-105"
+                  className="relative w-16 h-16 rounded-full border-2 border-white dark:border-neutral-800 object-cover shadow-xl transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
                 <div className="relative w-16 h-16 rounded-[22px] bg-linear-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 border-2 border-white dark:border-neutral-700 flex items-center justify-center text-2xl font-serif text-neutral-700 dark:text-neutral-300 shadow-xl transition-transform duration-300 group-hover:scale-105">

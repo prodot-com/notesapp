@@ -52,18 +52,6 @@ const Landing: React.FC = () => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
-        e.preventDefault();
-        setTheme(resolvedTheme === "dark" ? "light" : "dark");
-      }
-    };
-
-  window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [resolvedTheme, setTheme]);
-
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };

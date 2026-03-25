@@ -5,6 +5,7 @@ import Providers from "./providers";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next"
+// import ThemeShortcutProvider from "./hooks/useThemeShortcut";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +38,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system">
-          <Providers>
-            {children}
-            <Analytics/>
-            <Toaster/>
-          </Providers>
+          {/* <ThemeShortcutProvider> */}
+            <Providers>
+              {children}
+              <Analytics/>
+              <Toaster/>
+            </Providers>
+          {/* </ThemeShortcutProvider> */}
         </ThemeProvider>
         <script defer src="https://cloud.umami.is/script.js" data-website-id="b3be62b3-ee13-4c49-a27f-bc8412337d24"></script>
       </body>

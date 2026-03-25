@@ -57,17 +57,17 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
-let key: string;
+  let key: string;
 
-try {
-  const url = new URL(file.path);
-  key = url.pathname.slice(1);
-} catch {
-  return NextResponse.json(
-    { error: "Invalid file path" },
-    { status: 500 }
-  );
-}
+  try {
+    const url = new URL(file.path);
+    key = url.pathname.slice(1);
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid file path" },
+      { status: 500 }
+    );
+  }
 
   const command = new GetObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME!,
@@ -76,5 +76,5 @@ try {
 
   const signedUrl = await getSignedUrl(r2, command, { expiresIn: 300 });
 
-  return NextResponse.json({ url: signedUrl });
+  return NextResponse.json({ url: signedUrl, fileType: file.type });
 }

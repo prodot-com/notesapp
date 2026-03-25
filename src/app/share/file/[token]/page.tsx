@@ -14,11 +14,14 @@ export default async function SharedFile({
     where: { token },
   });
 
+  console.log("Share",share)
+
   if (
     !share ||
-    share.type !== "file" ||
-    (share.expiresAt && share.expiresAt < new Date())
+    share.type !== "file"
+    // (share.expiresAt && share.expiresAt < new Date())
   ) {
+    console.log("not found")
     notFound();
   }
 
@@ -26,7 +29,9 @@ export default async function SharedFile({
     where: { id: share.resourceId },
   });
 
-  if (!file) notFound();
+  console.log(file)
 
-  redirect(`/file/${file.id}`);
+  // if (!file) notFound();
+
+  // redirect(`/file/${file.id}`);
 }

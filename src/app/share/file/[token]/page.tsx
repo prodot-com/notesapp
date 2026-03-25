@@ -4,34 +4,26 @@ import { notFound, redirect } from "next/navigation";
 export default async function SharedFile({
   params,
 }: {
-  params: Promise<{ token: string }>; // ✅ Promise
+  params: Promise<{ token: string }>;
 }) {
-  const { token } = await params; // ✅ MUST await
 
-  console.log("TOKEN:", token);
+  console.log("started")
+  const { token } = await params;
+
+  console.log(token)
 
   const share = await prisma.shareToken.findUnique({
     where: { token },
   });
 
-  console.log("Share",share)
-
+  console.log(share)
   if (
     !share ||
-    share.type !== "file"
+    share.type !== "file" 
     // (share.expiresAt && share.expiresAt < new Date())
   ) {
-    console.log("not found")
     notFound();
   }
 
-  const file = await prisma.file.findUnique({
-    where: { id: share.resourceId },
-  });
-
-  console.log(file)
-
-  // if (!file) notFound();
-
-  // redirect(`/file/${file.id}`);
+  redirect(`/file/${share.resourceId}?token=${token}`);
 }

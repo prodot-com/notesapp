@@ -14,31 +14,82 @@ const r2 = new S3Client({
   },
 });
 
-export async function GET( req: Request,{ params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+){
+  console.log("started 2")
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
-  const { id } = await params;
+  const {id} = await params;
+  const { searchParams } = new URL(req.url);
+  const token = searchParams.get("token");
+  
 
-  const file = await prisma.file.findUnique({ where: { id } });
+  // console.log(token)
+
+  const file = await prisma.file.findUnique({
+    where: { id },
+  });
+
   // console.log(file)
 
-  if (!file || file.userId !== session.user.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!file) {
+    return NextResponse.json({ error: "File not found" }, { status: 404 });
   }
 
-  const key = file.path.split("/").slice(-2).join("/");
+  let isAllowed = false;
 
-  const signedUrl = await getSignedUrl(
-    r2,
-    new GetObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME!,
-      Key: key,
-    }),
-    { expiresIn: 60 * 5 } 
+  // ✅ OWNER ACCESS
+  if (session?.user?.id === file.userId) {
+    isAllowed = true;
+  }
+
+  console.log(isAllowed)
+  
+
+  // ✅ TOKEN ACCESS (NO LOGIN REQUIRED)
+  if (!isAllowed && token) {
+    const share = await prisma.shareToken.findUnique({
+      where: { token },
+    });
+
+    console.log(share)
+    if (
+      share &&
+      share.resourceId === file.id &&
+      share.type === "file" 
+    ) {
+      isAllowed = true;
+    }
+  }
+
+  // console.log("Allowed", isAllowed)
+
+  if (!isAllowed) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+  }
+
+  // console.log("Allowed")
+
+let key: string;
+
+try {
+  const url = new URL(file.path);
+  key = url.pathname.slice(1); // removes leading "/"
+} catch {
+  return NextResponse.json(
+    { error: "Invalid file path" },
+    { status: 500 }
   );
+}
+
+  const command = new GetObjectCommand({
+    Bucket: process.env.R2_BUCKET_NAME!,
+    Key: key,
+  });
+
+  const signedUrl = await getSignedUrl(r2, command, { expiresIn: 300 });
 
   return NextResponse.json({ url: signedUrl });
 }

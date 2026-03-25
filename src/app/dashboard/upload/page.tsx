@@ -465,8 +465,20 @@ export default function UploadPage() {
       if (!res.ok) throw new Error("Action failed");
 
       const { url } = await res.json();
-      window.open(`/file/${id}`, "_blank");
-      // window.open(url, "_blank", "noopener,noreferrer");
+
+      if (action === "view") {
+        window.open(`/file/${id}`, "_blank");
+      }
+
+      if (action === "download") {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
     } catch {
       toast.error("Unable to perform action");
     }
@@ -481,29 +493,6 @@ export default function UploadPage() {
       file: f,
     });
   }
-
-  // async function handleShare(id: string) {
-  //   try {
-  //     const res = await fetch("/api/upload/share", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         type: "file",
-  //         resourceId: id,
-  //         expiresInHours: 1,
-  //       }),
-  //     });
-
-  //     if (!res.ok) throw new Error("Share failed");
-
-  //     const { url } = await res.json();
-  //     await navigator.clipboard.writeText(url);
-
-  //     toast.success("Share link copied to clipboard");
-  //   } catch {
-  //     toast.error("Unable to create share link");
-  //   }
-  // }
 
   function handleShare(id: string) {
   const file = files.find((f) => f.id === id);

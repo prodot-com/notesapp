@@ -76,5 +76,5 @@ export async function GET(
 
   const signedUrl = await getSignedUrl(r2, command, { expiresIn: 300 });
 
-  return NextResponse.json({ url: signedUrl, fileType: file.type });
+  return NextResponse.json({ url: signedUrl, fileType: file.type, name: file.name });
 }

@@ -19,8 +19,8 @@ export default async function SharedFile({
   console.log(share)
   if (
     !share ||
-    share.type !== "file" 
-    // (share.expiresAt && share.expiresAt < new Date())
+    share.type !== "file" ||
+    (share.expiresAt && share.expiresAt < new Date())
   ) {
     notFound();
   }

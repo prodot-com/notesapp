@@ -58,7 +58,8 @@ export async function GET(
     if (
       share &&
       share.resourceId === file.id &&
-      share.type === "file" 
+      share.type === "file" &&
+      (!share.expiresAt || share.expiresAt > new Date())
     ) {
       isAllowed = true;
     }

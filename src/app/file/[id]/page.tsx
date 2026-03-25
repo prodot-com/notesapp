@@ -52,7 +52,6 @@ export default function FileViewer() {
     fetchFile();
   }, [id, token]);
 
-  // 🔥 MIME-based detection
   const getCategory = (mime?: string) => {
     if (!mime) return "unknown";
     const m = mime.toLowerCase();
@@ -81,31 +80,25 @@ export default function FileViewer() {
 
   const category = getCategory(data?.fileType);
 
-  // 🔥 Download handler (works always)
   const handleDownload = async () => {
-    if (!data?.url) return;
-
     try {
-      const res = await fetch(data.url);
-      const blob = await res.blob();
+      const res = await fetch(`/api/upload/${id}/download?token=${token || ""}`);
 
-      const blobUrl = URL.createObjectURL(blob);
+      if (!res.ok) throw new Error("Download failed");
+
+      const { url } = await res.json();
+
       const link = document.createElement("a");
-
-      link.href = blobUrl;
-      link.download = data.name || `file-${id}`;
-
+      link.href = url;
+      link.download = data?.name || "";
       document.body.appendChild(link);
       link.click();
       link.remove();
-
-      URL.revokeObjectURL(blobUrl);
     } catch (err) {
-      console.error("Download failed", err);
+      console.error(err);
     }
   };
 
-  // 🔄 Loading
   if (loading) {
     return (
       <div className="h-screen bg-[#FDFDFD] dark:bg-[#0a0a0a] flex flex-col items-center justify-center">
@@ -117,7 +110,6 @@ export default function FileViewer() {
     );
   }
 
-  // ❌ Error
   if (!data?.url) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center">
@@ -139,7 +131,7 @@ export default function FileViewer() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFDFD] dark:bg-[#0a0a0a]">
-      {/* HEADER */}
+      
       <header className="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b bg-white/70 dark:bg-black/70 backdrop-blur-xl">
         <div className="flex items-center gap-6">
           <button onClick={() => router.back()}>
@@ -184,14 +176,12 @@ export default function FileViewer() {
         </div>
       </header>
 
-      {/* CONTENT */}
       <main className="flex-1 flex items-center justify-center p-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-6xl min-h-[70vh] bg-white dark:bg-black border rounded-3xl flex items-center justify-center overflow-hidden"
+          className="w-full max-w-7xl min-h-[70vh] bg-white dark:bg-black border rounded-[5px] flex items-center justify-center overflow-hidden"
         >
-          {/* IMAGE */}
           {category === "image" && (
             <img
               src={data.url}
@@ -200,7 +190,7 @@ export default function FileViewer() {
             />
           )}
 
-          {/* PDF */}
+          
           {category === "pdf" && (
             <iframe
               src={data.url}
@@ -208,10 +198,8 @@ export default function FileViewer() {
             />
           )}
 
-          {/* TEXT */}
           {category === "text" && <TextViewer url={data.url} />}
 
-          {/* DOC / PPT / ZIP */}
           {["doc", "ppt", "zip", "unknown"].includes(category) && (
             <div className="flex flex-col items-center gap-6 text-center py-20">
               <FileIcon size={40} />

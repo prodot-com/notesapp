@@ -22,15 +22,41 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   const { id } = await params;
+
+  const { searchParams } = new URL(req.url);
+  const token = searchParams.get("token");
 
   const file = await prisma.file.findUnique({ where: { id } });
 
-  if (!file || file.userId !== session.user.id) {
+  if (!file) {
+    return NextResponse.json({ error: "File not found" }, { status: 404 });
+  }
+
+  let isAllowed = false;
+
+  // ✅ OWNER
+  if (session?.user?.id === file.userId) {
+    isAllowed = true;
+  }
+
+  // ✅ TOKEN
+  if (!isAllowed && token) {
+    const share = await prisma.shareToken.findUnique({
+      where: { token },
+    });
+
+    if (
+      share &&
+      share.resourceId === file.id &&
+      share.type === "file" &&
+      (!share.expiresAt || share.expiresAt > new Date())
+    ) {
+      isAllowed = true;
+    }
+  }
+
+  if (!isAllowed) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

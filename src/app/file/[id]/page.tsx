@@ -11,19 +11,25 @@ import {
   Maximize2,
   AlertCircle,
   Download,
+  ExternalLink,
+  Lock,
+  Info,
 } from "lucide-react";
 import Logo from "@/lib/logo";
+import { useSession } from "next-auth/react";
 
 type FileResponse = {
   url: string;
   name?: string;
   fileType?: string;
+  size?: string; // Added for the footer info
 };
 
 export default function FileViewer() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { data: session } = useSession();
 
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const token = searchParams.get("token");
@@ -36,9 +42,7 @@ export default function FileViewer() {
 
     const fetchFile = async () => {
       try {
-        const res = await fetch(
-          `/api/upload/${id}/view?token=${token || ""}`
-        );
+        const res = await fetch(`/api/upload/${id}/view?token=${token || ""}`);
         const json = await res.json();
         if (!res.ok) throw new Error();
         setData(json);
@@ -55,42 +59,29 @@ export default function FileViewer() {
   const getCategory = (mime?: string) => {
     if (!mime) return "unknown";
     const m = mime.toLowerCase();
-
     if (m.startsWith("image/")) return "image";
     if (m === "application/pdf") return "pdf";
     if (m === "text/plain") return "text";
-
-    if (
-      m === "application/msword" ||
-      m ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    )
-      return "doc";
-
-    if (
-      m ===
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    )
-      return "ppt";
-
+    if (m.includes("word") || m.includes("officedocument.wordprocessingml")) return "doc";
+    if (m.includes("presentation") || m.includes("powerpoint")) return "ppt";
     if (m === "application/zip") return "zip";
-
     return "unknown";
   };
 
   const category = getCategory(data?.fileType);
 
+  const handleRedirect = () => {
+    session ? router.push("/dashboard") : router.push("/");
+  };
+
   const handleDownload = async () => {
     try {
       const res = await fetch(`/api/upload/${id}/download?token=${token || ""}`);
-
       if (!res.ok) throw new Error("Download failed");
-
       const { url } = await res.json();
-
       const link = document.createElement("a");
       link.href = url;
-      link.download = data?.name || "";
+      link.download = data?.name || "download";
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -101,10 +92,13 @@ export default function FileViewer() {
 
   if (loading) {
     return (
-      <div className="h-screen bg-[#FDFDFD] dark:bg-[#0a0a0a] flex flex-col items-center justify-center">
-        <Loader2 className="animate-spin text-blue-600" size={40} />
-        <h3 className="font-serif italic text-xl dark:text-white mt-6">
-          Accessing Vault...
+      <div className="h-screen bg-[#FDFDFD] dark:bg-[#050505] flex flex-col items-center justify-center">
+        <div className="relative flex items-center justify-center">
+            <Loader2 className="animate-spin text-blue-600 absolute" size={48} strokeWidth={1} />
+            <Logo className="w-6 h-6 opacity-50" />
+        </div>
+        <h3 className="font-serif italic text-xl dark:text-zinc-400 mt-8 animate-pulse">
+          Decrypting Vault...
         </h3>
       </div>
     );
@@ -112,66 +106,66 @@ export default function FileViewer() {
 
   if (!data?.url) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-center">
-        <div>
-          <AlertCircle size={48} className="text-red-500 mb-6 mx-auto" />
-          <h2 className="text-3xl font-serif italic mb-4">
-            Asset Unavailable
-          </h2>
+      <div className="min-h-screen flex items-center justify-center text-center bg-[#FDFDFD] dark:bg-[#050505]">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <AlertCircle size={48} strokeWidth={1} className="text-zinc-400 mb-6 mx-auto" />
+          <h2 className="text-3xl font-serif italic mb-2 dark:text-white">Asset Unavailable</h2>
+          <p className="text-zinc-500 mb-8 max-w-xs mx-auto">This link may have expired or you lack the necessary permissions.</p>
           <button
             onClick={() => router.back()}
-            className="px-8 py-3 bg-black text-white rounded-xl"
+            className="px-10 py-3 bg-black dark:bg-white dark:text-black text-white rounded-full text-sm font-medium hover:opacity-80 transition-all"
           >
-            Go Back
+            Return to Safety
           </button>
-        </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFDFD] dark:bg-[#0a0a0a]">
+    <div className="min-h-screen flex flex-col bg-[#FDFDFD] dark:bg-[#050505] text-zinc-900 dark:text-zinc-100 selection:bg-blue-100 dark:selection:bg-zinc-800">
       
-      <header className="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b bg-white/70 dark:bg-black/70 backdrop-blur-xl">
-        <div className="flex items-center gap-6">
-          <button onClick={() => router.back()}>
-            <ArrowLeft size={20} />
+      <header className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
+        <div className="flex items-center gap-5">
+          <button 
+            onClick={() => router.back()}
+            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-colors"
+          >
+            <ArrowLeft size={19} strokeWidth={1.5} />
           </button>
 
-          <div className="flex items-center gap-3">
-            <Logo className="w-7 h-7" />
-            <span className="font-serif italic text-lg dark:text-white">
-              paperless
-            </span>
-          </div>
+          <div className="h-6 w-[1px] bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
 
-          <div className="hidden md:block">
-            <div className="flex items-center gap-2 text-blue-600 text-[10px] uppercase">
-              <ShieldCheck size={12} />
-              Verified
+          <div 
+            className="group flex items-center gap-3 cursor-pointer"
+            onClick={handleRedirect}
+          >
+            <div className="relative">
+                <Logo className="w-8 h-8 transition-transform group-hover:scale-105" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border-2 border-white dark:border-black" />
             </div>
-            <p className="text-sm text-neutral-500 truncate max-w-[200px]">
-              {data.name}
-            </p>
+            <div className="flex flex-col -space-y-1">
+              <span className="font-serif italic font-bold text-2xl leading-tight">paperless</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={handleDownload}
-            className="px-4 py-2 border rounded-lg flex items-center gap-2 text-sm"
+            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg flex items-center gap-2 text-xs font-medium transition-all"
           >
-            <Download size={16} />
-            Download
+            <Download size={15} />
+            <span className="hidden sm:inline">Download</span>
           </button>
 
           <a
             href={data.url}
             target="_blank"
-            className="px-4 py-2 bg-black text-white rounded-lg text-sm flex items-center gap-2"
+            className="px-4 py-2 bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 text-white rounded-lg text-xs font-medium flex items-center gap-2 hover:opacity-90 transition-all"
           >
-            <Maximize2 size={14} />
-            Open
+            <ExternalLink size={15} />
+            <span className="hidden sm:inline">External View</span>
           </a>
         </div>
       </header>
@@ -214,10 +208,36 @@ export default function FileViewer() {
           )}
         </motion.div>
       </main>
+
+      {/* --- FOOTER --- */}
+      <footer className="px-8 py-6 border-t border-zinc-200/50 dark:border-zinc-800/50 bg-white/50 dark:bg-black/50 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-zinc-500 dark:text-zinc-500 text-[13px]">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+                <ShieldCheck size={14} className="text-emerald-500" />
+                <span className="font-medium">End-to-End Encrypted</span>
+            </div>
+            <div className="flex items-center gap-2">
+                <Lock size={14} />
+                <span>Private Access</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 truncate max-w-md italic">
+            <Info size={14} />
+            <span className="truncate">{data.name || "Unnamed Asset"}</span>
+            <span className="opacity-50">|</span>
+            <span className="uppercase">{category}</span>
+          </div>
+
+          <div className="opacity-60 text-[11px] uppercase tracking-widest">
+            © {new Date().getFullYear()} Paperless Inc.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
-
 
 function TextViewer({ url }: { url: string }) {
   const [content, setContent] = useState("");
@@ -226,11 +246,11 @@ function TextViewer({ url }: { url: string }) {
     fetch(url)
       .then((res) => res.text())
       .then(setContent)
-      .catch(() => setContent("Failed to load file"));
+      .catch(() => setContent("Failed to load file content."));
   }, [url]);
 
   return (
-    <pre className="w-full h-full p-6 overflow-auto text-sm whitespace-pre-wrap">
+    <pre className="w-full h-full p-10 overflow-auto text-sm leading-relaxed whitespace-pre-wrap font-mono text-zinc-600 dark:text-zinc-400">
       {content}
     </pre>
   );

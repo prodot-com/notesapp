@@ -24,15 +24,10 @@ export async function GET(
   const {id} = await params;
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-  
-
-  // console.log(token)
 
   const file = await prisma.file.findUnique({
     where: { id },
   });
-
-  // console.log(file)
 
   if (!file) {
     return NextResponse.json({ error: "File not found" }, { status: 404 });
@@ -40,15 +35,12 @@ export async function GET(
 
   let isAllowed = false;
 
-  // ✅ OWNER ACCESS
   if (session?.user?.id === file.userId) {
     isAllowed = true;
   }
 
   console.log(isAllowed)
-  
 
-  // ✅ TOKEN ACCESS (NO LOGIN REQUIRED)
   if (!isAllowed && token) {
     const share = await prisma.shareToken.findUnique({
       where: { token },
@@ -65,19 +57,15 @@ export async function GET(
     }
   }
 
-  // console.log("Allowed", isAllowed)
-
   if (!isAllowed) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
-
-  // console.log("Allowed")
 
 let key: string;
 
 try {
   const url = new URL(file.path);
-  key = url.pathname.slice(1); // removes leading "/"
+  key = url.pathname.slice(1);
 } catch {
   return NextResponse.json(
     { error: "Invalid file path" },

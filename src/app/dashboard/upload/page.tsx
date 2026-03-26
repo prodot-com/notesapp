@@ -33,6 +33,7 @@ export default function UploadPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  const [uploadingFiles, setUploadingFiles] = useState<string[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -50,13 +51,25 @@ export default function UploadPage() {
     message: "",
   });
 
+  function formatSize(bytes: number) {
+    const sizes = ["B", "KB", "MB", "GB"];
+    let i = 0;
+
+    while (bytes >= 1024 && i < sizes.length - 1) {
+      bytes /= 1024;
+      i++;
+  }
+
+  return `${bytes.toFixed(1)} ${sizes[i]}`;
+}
+
   function validateFile(file: File): string | null {
     if (!allowedTypes.includes(file.type)) {
-      return "Unsupported file type.";
+      return `Unsupported file type (${file.type || "unknown"})`;
     }
 
     if (file.size > MAX_SIZE) {
-      return "File exceeds size limit.";
+      return `File too large (${formatSize(file.size)}). Max allowed is ${formatSize(MAX_SIZE)}.`;
     }
 
     return null;
@@ -81,33 +94,64 @@ export default function UploadPage() {
   }, [status]);
 
   async function handleFiles(selectedFiles: File[]) {
+    if (loading) return;
+
     if (!selectedFiles.length) return;
+
+    const validFiles: File[] = [];
+
+    for (const file of selectedFiles) {
+      const error = validateFile(file);
+
+      if (error) {
+        toast.error(error, {
+          description: file.name,
+        });
+      } else {
+        validFiles.push(file);
+      }
+    }
+
+    if (validFiles.length === 0) return;
 
     setLoading(true);
 
     try {
-      for (const file of selectedFiles) {
-        const validationError = validateFile(file);
-
-        if (validationError) {
-          toast.error(`${file.name}: ${validationError}`);
-          continue;
-        }
+      for (const file of validFiles) {
+        setUploadingFiles((prev) => [...prev, file.name]);
 
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15000);
 
-        const data = await res.json();
+        try {
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+            signal: controller.signal,
+          });
 
-        if (!res.ok) {
-          toast.error(`${file.name}: ${data.error || "Upload failed"}`);
-        } else {
-          toast.success(`${file.name} uploaded`);
+          const data = await res.json();
+
+          if (!res.ok) {
+            toast.error(`${file.name}: ${data.error || "Upload failed"}`);
+          } else {
+            toast.success(`${file.name} uploaded`);
+          }
+        } catch (err: any) {
+          if (err.name === "AbortError") {
+            toast.error(`${file.name}: Upload timeout`);
+          } else {
+            toast.error(`${file.name}: Upload failed`);
+          }
+        } finally {
+          clearTimeout(timeout);
+
+          setUploadingFiles((prev) =>
+            prev.filter((f) => f !== file.name)
+          );
         }
       }
 

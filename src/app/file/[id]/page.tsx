@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Logo from "@/lib/logo";
 import { useSession } from "next-auth/react";
+import PdfViewer from "@/components/PdfViewer";
 
 type FileResponse = {
   url: string;
@@ -186,10 +187,7 @@ export default function FileViewer() {
 
           
           {category === "pdf" && (
-            <iframe
-              src={data.url}
-              className="w-full h-[85vh]"
-            />
+            <PdfViewer url={data.url} />
           )}
 
           {category === "text" && <TextViewer url={data.url} />}

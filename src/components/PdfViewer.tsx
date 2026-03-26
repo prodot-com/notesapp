@@ -2,42 +2,48 @@
 
 import { useEffect, useRef } from "react";
 import * as pdfjsLib from "pdfjs-dist";
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-import "pdfjs-dist/build/pdf.worker.entry";
 
-type Props = {
-  url: string;
-};
-
-export default function PdfViewer({ url }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+export default function PdfViewer({ url }: { url: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const loadPdf = async () => {
-      const loadingTask = pdfjsLib.getDocument(url);
-      const pdf = await loadingTask.promise;
+    if (!url) return;
 
-      const page = await pdf.getPage(1); // first page
-      const viewport = page.getViewport({ scale: 1.5 });
+    const renderPdf = async () => {
+      const pdf = await pdfjsLib.getDocument(url).promise;
 
-      const canvas = canvasRef.current!;
+      const container = containerRef.current!;
+      container.innerHTML = "";
 
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 1.2 });
 
-    await page.render({
-        canvas,
-        viewport,
-    }).promise;
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d")!;
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        container.appendChild(canvas);
+
+        await page.render({
+          canvasContext: context,
+          viewport,
+        } as any).promise;
+      }
     };
 
-    loadPdf();
+    renderPdf();
   }, [url]);
 
   return (
-    <div className="w-full flex justify-center overflow-auto">
-      <canvas ref={canvasRef} />
-    </div>
+    <div
+      ref={containerRef}
+      className="w-full flex flex-col items-center gap-6 overflow-auto"
+    />
   );
 }

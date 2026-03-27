@@ -17,6 +17,10 @@ import {
 } from "lucide-react";
 import Logo from "@/lib/logo";
 import { useSession } from "next-auth/react";
+import {
+  TransformWrapper,
+  TransformComponent,
+} from "react-zoom-pan-pinch";
 
 type FileResponse = {
   url: string;
@@ -39,6 +43,8 @@ export default function FileViewer() {
 
   const from = searchParams.get("from");
   const showBack = from === "upload";
+  const [scale, setScale] = useState(1);
+  const [darkBg, setDarkBg] = useState(true);
 
   const isMobile = typeof window !== "undefined" &&
   /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -131,7 +137,7 @@ export default function FileViewer() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFDFD] dark:bg-[#050505] text-zinc-900 dark:text-zinc-100 selection:bg-blue-100 dark:selection:bg-zinc-800">
       
-      <header className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-[4px]">
         <div className="flex items-center gap-5">
           
           {showBack && (
@@ -185,12 +191,76 @@ export default function FileViewer() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-7xl min-h-[70vh] bg-white dark:bg-black border rounded-[5px] flex items-center justify-center overflow-hidden"
         >
+
           {category === "image" && (
-            <img
-              src={data.url}
-              alt={data.name}
-              className="max-w-full max-h-full object-contain"
-            />
+            <div className={`relative w-full h-full flex items-center justify-center ${darkBg ? "bg-black" : "bg-white"}`}>
+
+<button
+  onClick={() => setDarkBg((p) => !p)}
+  className="px-3 py-1 text-white text-xs"
+>
+  BG
+</button>
+              <TransformWrapper
+                initialScale={1}
+                minScale={1}
+                maxScale={5}
+                doubleClick={{ mode: "zoomIn" }}
+                pinch={{ step: 5 }}
+                wheel={{ step: 0.2 }}
+              >
+                {({
+                  zoomIn,
+                  zoomOut,
+                  resetTransform,
+                }) => (
+                  <>
+                    {/* IMAGE */}
+                    <TransformComponent
+                      wrapperClass="!w-full !h-full flex items-center justify-center"
+                      contentClass="flex items-center justify-center"
+                    >
+                      <img
+                        src={data.url}
+                        alt={data.name}
+                        className="max-w-full max-h-full object-contain select-none"
+                        draggable={false}
+                      />
+                    </TransformComponent>
+
+                    {/* CONTROLS */}
+                    <div className="absolute top-4 right-4 flex gap-2 bg-black/60 backdrop-blur-md p-2 rounded-xl">
+
+                      <button
+                        onClick={() => zoomIn()}
+                        className="px-3 py-1 text-white text-sm"
+                      >
+                        +
+                      </button>
+
+                      <button
+                        onClick={() => zoomOut()}
+                        className="px-3 py-1 text-white text-sm"
+                      >
+                        −
+                      </button>
+
+                      <button
+                        onClick={() => resetTransform()}
+                        className="px-3 py-1 text-white text-sm"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </>
+                )}
+              </TransformWrapper>
+
+              {/* FILE INFO */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs px-4 py-2 rounded-full backdrop-blur-md">
+                {data.name}
+              </div>
+            </div>
           )}
 
           

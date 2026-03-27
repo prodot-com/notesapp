@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import Logo from "@/lib/logo";
 import { useSession } from "next-auth/react";
-import PdfViewer from "@/components/PdfViewer";
 
 type FileResponse = {
   url: string;
@@ -37,6 +36,12 @@ export default function FileViewer() {
 
   const [data, setData] = useState<FileResponse | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const from = searchParams.get("from");
+  const showBack = from === "upload";
+
+  const isMobile = typeof window !== "undefined" &&
+  /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   useEffect(() => {
     if (!id) return;
@@ -128,14 +133,17 @@ export default function FileViewer() {
       
       <header className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/80 dark:bg-black/80 backdrop-blur-xl">
         <div className="flex items-center gap-5">
-          <button 
-            onClick={() => router.back()}
-            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-colors"
-          >
-            <ArrowLeft size={19} strokeWidth={1.5} />
-          </button>
+          
+          {showBack && (
+            <button 
+              onClick={() => router.back()}
+              className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-full transition-colors"
+            >
+              <ArrowLeft size={19} strokeWidth={1.5} />
+            </button>
+          )}
 
-          <div className="h-6 w-[1px] bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
+          {showBack && <div className="h-6 w-[1px] bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />}
 
           <div 
             className="group flex items-center gap-3 cursor-pointer"
@@ -154,7 +162,7 @@ export default function FileViewer() {
         <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={handleDownload}
-            className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg flex items-center gap-2 text-xs font-medium transition-all"
+            className="px-4 py-2 cursor-pointer border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg flex items-center gap-2 text-xs font-medium transition-all"
           >
             <Download size={15} />
             <span className="hidden sm:inline">Download</span>
@@ -187,7 +195,33 @@ export default function FileViewer() {
 
           
           {category === "pdf" && (
-            <PdfViewer url={data.url} />
+            isMobile ? (
+              <div className="flex flex-col items-center gap-6 py-20 text-center">
+                <p className="text-sm text-neutral-500">
+                  PDF preview is not supported on your device
+                </p>
+
+                <a
+                  href={data.url}
+                  target="_blank"
+                  className="px-6 py-3 bg-black text-white rounded-xl text-sm"
+                >
+                  Open PDF
+                </a>
+
+                <button
+                  onClick={handleDownload}
+                  className="px-6 py-3 border rounded-xl text-sm"
+                >
+                  Download
+                </button>
+              </div>
+            ) : (
+              <iframe
+                src={data.url}
+                className="w-full min-h-[85vh]"
+              />
+            )
           )}
 
           {category === "text" && <TextViewer url={data.url} />}

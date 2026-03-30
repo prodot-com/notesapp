@@ -25,13 +25,6 @@ import Logo from "@/lib/logo";
 import { useSession } from "next-auth/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-import { Document, Page, pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-import 'react-pdf/dist/Page/TextLayer.css';
-
-// You must set the worker source
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
 type FileResponse = {
   url: string;
   name?: string;
@@ -52,19 +45,6 @@ export default function FileViewer() {
   const [data, setData] = useState<FileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [darkBg, setDarkBg] = useState(true);
-  const [numPages, setNumPages] = useState(0);
-
-  const [pdfWidth, setPdfWidth] = useState(600);
-
-useEffect(() => {
-  const updateWidth = () => {
-    const w = window.innerWidth;
-    setPdfWidth(w > 600 ? 600 : w * 0.9);
-  };
-  updateWidth();
-  window.addEventListener("resize", updateWidth);
-  return () => window.removeEventListener("resize", updateWidth);
-}, []);
 
   const isMobile = typeof window !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
@@ -179,7 +159,7 @@ useEffect(() => {
               </div>
             )}
 
-          {/* {category === "pdf" && (
+          {category === "pdf" && (
             isMobile ? (
               <div className="flex flex-col items-center gap-6 py-20 text-center">
                 <p className="text-sm text-neutral-500">
@@ -207,44 +187,7 @@ useEffect(() => {
                 className="w-full min-h-[85vh]"
               />
             )
-          )} */}
-
-          {category === "pdf" && (
-  <div className="flex flex-col items-center w-full min-h-[85vh] bg-neutral-100 overflow-auto py-6">
-    
-    <TransformWrapper>
-      <TransformComponent>
-        <Document
-          file={data?.url}
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          loading={
-            <div className="flex flex-col items-center gap-3 py-20">
-              <Loader2 className="animate-spin" />
-              <p className="text-sm text-zinc-500">Rendering PDF...</p>
-            </div>
-          }
-          error={<p className="text-red-500">Failed to load PDF</p>}
-          className="flex flex-col items-center gap-6"
-        >
-          {Array.from(new Array(numPages), (_, i) => (
-            <Page key={i} pageNumber={i + 1} width={pdfWidth} />
-          ))}
-        </Document>
-      </TransformComponent>
-    </TransformWrapper>
-
-    {isMobile && (
-      <div className="mt-6 flex gap-4">
-        <a href={data?.url} target="_blank" className="px-4 py-2 bg-black text-white rounded-lg">
-          Open PDF
-        </a>
-        <button onClick={handleDownload} className="px-4 py-2 border rounded-lg">
-          Download
-        </button>
-      </div>
-    )}
-  </div>
-)}
+          )}
 
 
             {category === "text" && <TextViewer url={data?.url || ""} />}

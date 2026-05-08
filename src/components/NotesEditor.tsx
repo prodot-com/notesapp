@@ -424,7 +424,7 @@
                         className={`cursor-pointer flex items-center gap-1 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
                         openPreviews
                             ? "bg-black text-white dark:bg-white dark:text-black"
-                            : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-neutral-900"
+                            : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-neutral-900 dark:hover:text-neutral-300"
                         }`}
                     >
                         {openPreviews ? <EyeOff size={14} /> : <Eye size={14} />}

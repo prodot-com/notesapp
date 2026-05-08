@@ -65,16 +65,49 @@ export default function FileViewer() {
     fetchFile();
   }, [id, token]);
 
+  // const getCategory = (mime?: string) => {
+  //   if (!mime) return "unknown";
+  //   const m = mime.toLowerCase();
+  //   if (m.startsWith("image/")) return "image";
+  //   if (m === "application/pdf") return "pdf";
+  //   if (m === "text/plain") return "text";
+  //   if (m.includes("word") || m.includes("officedocument.wordprocessingml")) return "doc";
+  //   if (m.includes("presentation") || m.includes("powerpoint")) return "ppt";
+  //   return "unknown";
+  // };
+
   const getCategory = (mime?: string) => {
-    if (!mime) return "unknown";
-    const m = mime.toLowerCase();
-    if (m.startsWith("image/")) return "image";
-    if (m === "application/pdf") return "pdf";
-    if (m === "text/plain") return "text";
-    if (m.includes("word") || m.includes("officedocument.wordprocessingml")) return "doc";
-    if (m.includes("presentation") || m.includes("powerpoint")) return "ppt";
-    return "unknown";
-  };
+  if (!mime) return "unknown";
+
+  const m = mime.toLowerCase();
+
+  if (m.startsWith("image/")) return "image";
+
+  if (m === "application/pdf") return "pdf";
+
+  if (m === "text/plain") return "text";
+
+  if (
+    m.includes("word") ||
+    m.includes("officedocument.wordprocessingml")
+  )
+    return "doc";
+
+  if (
+    m.includes("sheet") ||
+    m.includes("excel") ||
+    m.includes("spreadsheetml")
+  )
+    return "xlsx";
+
+  if (
+    m.includes("presentation") ||
+    m.includes("powerpoint")
+  )
+    return "ppt";
+
+  return "unknown";
+};
 
   const category = getCategory(data?.fileType);
 
@@ -159,7 +192,7 @@ export default function FileViewer() {
               </div>
             )}
 
-          {category === "pdf" && (
+          {/* {category === "pdf" && (
             isMobile ? (
               <div className="flex flex-col items-center gap-6 py-20 text-center">
                 <p className="text-sm text-neutral-500">
@@ -187,12 +220,20 @@ export default function FileViewer() {
                 className="w-full min-h-[85vh]"
               />
             )
-          )}
+          )} */}
+
+          {category === "pdf" && (
+  <iframe
+    src={data?.url}
+    className="w-full min-h-[85vh] bg-white"
+    title={data?.name}
+  />
+)}
 
 
             {category === "text" && <TextViewer url={data?.url || ""} />}
 
-            {["doc", "ppt", "unknown"].includes(category) && (
+            {/* {["doc", "ppt", "unknown"].includes(category) && (
               <div className="flex flex-col items-center gap-6 py-20">
                 <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400">
                   <FileIcon size={32} />
@@ -205,7 +246,14 @@ export default function FileViewer() {
                   Download File
                 </button>
               </div>
-            )}
+            )} */}
+            {["doc", "ppt", "xlsx"].includes(category) && (
+  <iframe
+    src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(data?.url || "")}`}
+    className="w-full min-h-[85vh] bg-white"
+    title={data?.name}
+  />
+)}
           </motion.div>
         </AnimatePresence>
       </main>

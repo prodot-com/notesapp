@@ -14,7 +14,7 @@ import {
   Home,
   Loader2,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/lib/logo";
@@ -29,35 +29,35 @@ export default function Dashboard({
   storageUsed: number;
   children: React.ReactNode;
 }) {
-  const {theme, setTheme, resolvedTheme} = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [loadingTab, setLoadingTab] = useState<string | null>(null);
 
   const pathname = usePathname();
 
   useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
-      e.preventDefault();
-      setTheme(resolvedTheme === "dark" ? "light" : "dark");
-    }
-  };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "j") {
+        e.preventDefault();
+        setTheme(resolvedTheme === "dark" ? "light" : "dark");
+      }
+    };
 
-  window.addEventListener("keydown", handleKeyDown);
-  return () => window.removeEventListener("keydown", handleKeyDown);
-}, [resolvedTheme, setTheme]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [resolvedTheme, setTheme]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setMounted(true);
-  },[])
+  }, []);
 
   useEffect(() => {
     setLoadingTab(null);
   }, [pathname]);
 
   const toggleTheme = () => {
-  setTheme(resolvedTheme === "dark" ? "light" : "dark");
-};
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
   const maxStorage = 1 * 1024 * 1024 * 1024;
   const percent = Math.min((storageUsed / maxStorage) * 100, 100);
@@ -65,34 +65,56 @@ export default function Dashboard({
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] dark:bg-[#050505] text-[#1A1A1A] dark:text-neutral-100 flex flex-col md:flex-row transition-colors duration-500">
-
       <aside className="hidden md:flex w-72 border-r border-neutral-100 dark:border-neutral-900 flex-col bg-white dark:bg-[#050505] sticky top-0 h-screen z-20">
-
         <div className="p-8 flex items-center gap-3 group cursor-default">
           <div className="relative">
             <Logo className="w-10 h-10 text-3xl dark:text-white text-black rotate-10" />
           </div>
-          <span className="font-serif font-bold italic text-2xl tracking-tight">paperless</span>
+          <span className="font-serif font-bold italic text-2xl tracking-tight">
+            paperless
+          </span>
         </div>
 
         <nav className="flex-1 px-4 space-y-1.5 mt-2">
-          <SidebarItem href="/dashboard" icon={<Home size={18} />} label="Workspace" active={pathname === "/dashboard"} />
-          <SidebarItem href="/dashboard/notes" icon={<FileText size={18} />} label="Notes Archive" active={pathname.startsWith("/dashboard/notes")} />
-          <SidebarItem href="/dashboard/upload" icon={<Upload size={18} />} label="Vault Assets" active={pathname.startsWith("/dashboard/upload")} />
-          <SidebarItem href="/dashboard/settings" icon={<Settings size={18} />} label="System Prefs" active={pathname.startsWith("/dashboard/settings")} />
+          <SidebarItem
+            href="/dashboard"
+            icon={<Home size={18} />}
+            label="Workspace"
+            active={pathname === "/dashboard"}
+          />
+          <SidebarItem
+            href="/dashboard/notes"
+            icon={<FileText size={18} />}
+            label="Notes Archive"
+            active={pathname.startsWith("/dashboard/notes")}
+          />
+          <SidebarItem
+            href="/dashboard/upload"
+            icon={<Upload size={18} />}
+            label="Vault Assets"
+            active={pathname.startsWith("/dashboard/upload")}
+          />
+          <SidebarItem
+            href="/dashboard/settings"
+            icon={<Settings size={18} />}
+            label="System Prefs"
+            active={pathname.startsWith("/dashboard/settings")}
+          />
 
           <div className="pt-6 px-3">
             <button
               onClick={toggleTheme}
               className="cursor-pointer w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/50 border border-neutral-100 dark:border-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all group"
             >
-              <span className="text-[10px] font-bold uppercase tracking-widest">{mounted && resolvedTheme === "dark" ? "Dark" : "Light"}</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                {mounted && resolvedTheme === "dark" ? "Dark" : "Light"}
+              </span>
               {/* {isDark ? <Moon size={16} /> : <Sun size={16} />} */}
               {mounted && resolvedTheme === "dark" ? (
-  <Moon size={16} />
-) : (
-  <Sun size={16} />
-)}
+                <Moon size={16} />
+              ) : (
+                <Sun size={16} />
+              )}
             </button>
           </div>
         </nav>
@@ -101,14 +123,16 @@ export default function Dashboard({
           <div className="bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-100 dark:border-neutral-900 rounded-xl p-5 shadow-inner">
             <div className="flex justify-between text-[10px] uppercase tracking-widest font-bold text-neutral-400 mb-3">
               <span>Storage</span>
-              <span className={percent > 80 ? "text-red-500" : ""}>{roundedPercent}% out of 1GB</span>
+              <span className={percent > 80 ? "text-red-500" : ""}>
+                {roundedPercent}% out of 1GB
+              </span>
             </div>
             <div className="h-1.5 w-full bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${percent}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className={`h-full transition-colors ${percent > 80 ? 'bg-red-500' : 'bg-blue-500'}`}
+                className={`h-full transition-colors ${percent > 80 ? "bg-red-500" : "bg-blue-500"}`}
               />
             </div>
           </div>
@@ -128,7 +152,7 @@ export default function Dashboard({
                   {session?.user?.name}
                 </p>
                 <p className="text-[10px] text-neutral-400 truncate flex items-center gap-1">
-                    {session?.user?.email}
+                  {session?.user?.email}
                 </p>
               </div>
             </div>
@@ -144,15 +168,18 @@ export default function Dashboard({
 
       <header className="md:hidden flex items-center justify-between px-6 py-5 bg-white/80 dark:bg-[#050505]/80 backdrop-blur-xl border-b border-neutral-100 dark:border-neutral-900 sticky top-0 z-30 transition-colors">
         <div className="flex items-center gap-2">
-          <Logo className="w-7 h-7 text-black dark:text-white rotate-10"/>
+          <Logo className="w-7 h-7 text-black dark:text-white rotate-10" />
           <span className="font-serif italic tracking-tight">paperless</span>
         </div>
-        <button onClick={toggleTheme} className="p-2.5 bg-neutral-50 dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 text-neutral-500">
+        <button
+          onClick={toggleTheme}
+          className="p-2.5 bg-neutral-50 dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 text-neutral-500"
+        >
           {mounted && resolvedTheme === "dark" ? (
-              <Moon size={16} />
-            ) : (
-              <Sun size={16} />
-            )}
+            <Moon size={16} />
+          ) : (
+            <Sun size={16} />
+          )}
         </button>
       </header>
 
@@ -162,11 +189,38 @@ export default function Dashboard({
 
       <div className="md:hidden fixed -bottom-2 left-1/2 -translate-x-1/2 w-full z-50">
         <nav className="bg-white dark:bg-black border-t border-neutral-300 dark:border-neutral-800/50 py-3 flex justify-between items-center px-4">
-          <MobileTab href="/dashboard" icon={<Home size={22} />} active={pathname === "/dashboard"} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />
-          <MobileTab href="/dashboard/notes" icon={<FileText size={22} />} active={pathname.startsWith("/dashboard/notes")} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />
-          <MobileTab href="/dashboard/upload" icon={<Upload size={22} />} active={pathname.startsWith("/dashboard/upload")} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />
-          <MobileTab href="/dashboard/settings" icon={<Settings size={22} />} active={pathname.startsWith("/dashboard/settings")} loadingTab={loadingTab} setLoadingTab={setLoadingTab} />
-          <button onClick={() => signOut({ callbackUrl: "/" })} className="text-neutral-400 p-3 hover:text-red-500 transition-colors">
+          <MobileTab
+            href="/dashboard"
+            icon={<Home size={22} />}
+            active={pathname === "/dashboard"}
+            loadingTab={loadingTab}
+            setLoadingTab={setLoadingTab}
+          />
+          <MobileTab
+            href="/dashboard/notes"
+            icon={<FileText size={22} />}
+            active={pathname.startsWith("/dashboard/notes")}
+            loadingTab={loadingTab}
+            setLoadingTab={setLoadingTab}
+          />
+          <MobileTab
+            href="/dashboard/upload"
+            icon={<Upload size={22} />}
+            active={pathname.startsWith("/dashboard/upload")}
+            loadingTab={loadingTab}
+            setLoadingTab={setLoadingTab}
+          />
+          <MobileTab
+            href="/dashboard/settings"
+            icon={<Settings size={22} />}
+            active={pathname.startsWith("/dashboard/settings")}
+            loadingTab={loadingTab}
+            setLoadingTab={setLoadingTab}
+          />
+          <button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="text-neutral-400 p-3 hover:text-red-500 transition-colors"
+          >
             <LogOut size={22} />
           </button>
         </nav>
@@ -175,8 +229,17 @@ export default function Dashboard({
   );
 }
 
-
-function SidebarItem({ href, icon, label, active }: { href: string; icon: React.ReactNode; label: string; active?: boolean }) {
+function SidebarItem({
+  href,
+  icon,
+  label,
+  active,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+}) {
   return (
     <Link href={href} className="block relative group px-3">
       <div
@@ -186,12 +249,19 @@ function SidebarItem({ href, icon, label, active }: { href: string; icon: React.
             : "text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 hover:text-neutral-900 dark:hover:text-white"
         }`}
       >
-        <span className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110"}`}>
+        <span
+          className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-110"}`}
+        >
           {icon}
         </span>
-        <span className="text-sm font-medium tracking-tight flex-1">{label}</span>
+        <span className="text-sm font-medium tracking-tight flex-1">
+          {label}
+        </span>
         {active && (
-           <motion.div layoutId="pill" className="w-1 h-4 bg-current rounded-full" />
+          <motion.div
+            layoutId="pill"
+            className="w-1 h-4 bg-current rounded-full"
+          />
         )}
       </div>
     </Link>
